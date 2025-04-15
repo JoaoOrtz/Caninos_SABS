@@ -24,6 +24,9 @@ export const Layout = () => {
             <li className="nav-item">
               <Link to="/dashboard/Categorias" className="nav-link text-white py-2 px-3 hover-bg-primary rounded">Categorias</Link>
             </li>
+            <li className="nav-item">
+              <Link to="/dashboard/Servicios" className="nav-link text-white py-2 px-3 hover-bg-primary rounded">Servicios</Link>
+            </li>
           </ul>
         </nav>
 

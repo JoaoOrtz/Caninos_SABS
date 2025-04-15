@@ -1,6 +1,6 @@
 import React from 'react'
 
-export const CategoriesDashboard = () => {
+export const CategoryDashboard = () => {
   return (
     <div>CategoriesDashboard</div>
   )
