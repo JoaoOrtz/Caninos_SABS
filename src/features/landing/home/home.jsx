@@ -22,11 +22,11 @@ export const Home = () => {
   return (
     <>
       {/* Home descripción */}
-      <header className="d-flex align-items-center text-black py-7 min-vh-100 pt-5 bg-info">
+      <header className="d-flex align-items-center text-black py-7 min-vh-100 pt-5 bg-primary-subtle">
         <div className="container">
           <div className="row align-items-center">
             <div className="col-12 col-md-6 text-center text-md-start">
-              <h1 className="header-tittle text-white">
+              <h1 className="header-tittle text-primary">
                 Bienvenido a Caninos SABS
               </h1>
               <p className="fs-5">

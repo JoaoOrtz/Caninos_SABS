@@ -48,7 +48,7 @@ export const About = () => {
                 </div>
               </div>
 
-            <button className="btn btn-info btn-lg btn-about" onClick={irRegistro}>
+            <button className="btn btn-primary btn-lg btn-about" onClick={irRegistro}>
               ¡Registrate!
             </button>
 
@@ -60,9 +60,9 @@ export const About = () => {
 
       {/* Misión, Visión y objetivo */}
 
-      <div className="bg-info py-5">
+      <div className="bg-primary-subtle py-5">
         <div className="container">
-          <h1 className="title text-center text-white">Misión, Visión y Objetivo</h1>
+          <h1 className="title text-center text-primary">Misión, Visión y Objetivo</h1>
           <div className="row text-center">
 
             <div className="col-lg-4 col-sm-6 my-2">
