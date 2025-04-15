@@ -3,7 +3,7 @@ import React from 'react'
 export const Home = () => {
   return (
     <>    
-    <header className="d-flex align-items-center text-black py-7 min-vh-100 mt-5">
+    <header className="d-flex align-items-center text-black py-7 min-vh-100 pt-5">
     <div className="container">
         <div className="row align-items-center">
             <div className="col-12 col-md-6 text-center text-md-start">
@@ -17,7 +17,7 @@ export const Home = () => {
             </div>
 
             <div className="col-12 col-md-6 d-flex justify-content-center">
-                <img src="./img/Logo.png" className="img-fluid w-75" alt="Logo Caninos SABS"/>
+                <img src="../../../public/img/logo.png" className="img-fluid w-75" alt="Logo Caninos SABS"/>
             </div>
         </div>
       </div>

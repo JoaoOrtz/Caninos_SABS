@@ -13,11 +13,11 @@ export const Landing = () => {
 
             <div className="collapse navbar-collapse" id="navbarNav">
                 <ul className="navbar-nav ms-auto">
-                    <li className="nav-item"><Link className="nav-link active" to="#">Home</Link></li>
+                    <li className="nav-item"><Link className="nav-link active" to="/">Home</Link></li>
                     <li className="nav-item"><Link className="nav-link active" to="/landing/about">About Us</Link></li>
-                    <li className="nav-item"><Link className="nav-link active" to="#">Products</Link></li>
-                    <li className="nav-item"><Link className="nav-link active" to="#">Services</Link></li>
-                    <li className="nav-item"><Link className="nav-link active" to="#">Categories</Link></li>
+                    <li className="nav-item"><Link className="nav-link active" to="">Products</Link></li>
+                    <li className="nav-item"><Link className="nav-link active" to="">Services</Link></li>
+                    <li className="nav-item"><Link className="nav-link active" to="">Categories</Link></li>
                 </ul>
             </div>
         </div>

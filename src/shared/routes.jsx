@@ -23,6 +23,7 @@ export const RouteComponent = () => {
         <Routes>
           {/* Ruta de la landing */}
           <Route path='/' element={<Landing/>}>
+            <Route index element={<Home/>}/>
             <Route path='inicio' element={<Home/>} />
             <Route path='Sobre-Nosotros' element={<About/>} />
             <Route path='productos' element={<ProductsLanding/>} />
