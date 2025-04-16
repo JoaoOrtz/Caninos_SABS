@@ -1,7 +1,12 @@
 import React from 'react'
-import { Link, Outlet } from 'react-router-dom'
+import { Link, Outlet, useNavigate } from 'react-router-dom'
 
 export const Layout = () => {
+  const navegation  = useNavigate()
+    const logout = () =>{
+      localStorage.removeItem("Token");
+        navegation('/')
+    }
   return (
     <>
       <div className="d-flex min-vh-100">
@@ -35,7 +40,7 @@ export const Layout = () => {
           {/* Navbar superior */}
           <div className="bg-light p-3 d-flex justify-content-between align-items-center">
             <p className="h5 fw-semibold m-0">Bienvenido</p>
-            <button className="btn btn-danger">
+            <button onClick={logout} className="btn btn-danger">
               Salir
             </button>
           </div>

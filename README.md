@@ -19,3 +19,5 @@ npm i react-router-dom
 # React Icon
 npm install react-icons --save
 
+#Axios
+npm i axios
