@@ -10,11 +10,13 @@ import { Login } from '../features/auth/login'
 import { Record } from '../features/auth/record'
 import { Layout } from '../features/dashboard/layout'
 import { UserDashboard } from '../features/dashboard/Users/users'
-import { RoleDashboard } from '../features/dashboard/roles/role'
+import { RoleDashboard } from '../features/dashboard/roles/roles'
 import { CompanyDashboard } from '../features/dashboard/companies/company'
 import { ProductDashboard } from '../features/dashboard/products/product'
 import { CategoryDashboard } from '../features/dashboard/categories/category'
 import { ServiceDashboard } from '../features/dashboard/services/service'
+import { FormProduct } from '../features/dashboard/products/components/create/formProduct'
+import { FormProductUpdate } from '../features/dashboard/products/components/update/formProductUpdate'
 
 
 export const RouteComponent = () => {
@@ -23,6 +25,7 @@ export const RouteComponent = () => {
         <Routes>
           {/* Ruta de la landing */}
           <Route path='/' element={<Landing/>}>
+            <Route index element={<Home/>}/>
             <Route path='inicio' element={<Home/>} />
             <Route path='Sobre-Nosotros' element={<About/>} />
             <Route path='productos' element={<ProductsLanding/>} />
@@ -40,6 +43,8 @@ export const RouteComponent = () => {
             <Route path='Roles' element={<RoleDashboard/>} />
             <Route path='Compañias' element={<CompanyDashboard/>} />
             <Route path='Productos' element={<ProductDashboard/>} />
+            <Route path='nuevo-producto' element={<FormProduct/>} />
+            <Route path='editar-producto/:id' element={<FormProductUpdate/>} />
             <Route path='Categorias' element={<CategoryDashboard/>} />
             <Route path='Servicios' element={<ServiceDashboard/>} />
           </Route>
