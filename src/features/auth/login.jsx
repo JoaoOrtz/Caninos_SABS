@@ -23,7 +23,7 @@ export const Login = () => {
     const response = await PostLogin(formData);
     const Token = localStorage.getItem('Token');
     if (Token) {
-      navigate("/dashboard");
+      navigate("/dashboard", { replace: true });
     }
     else{
       alert('credenciales incorrectas')
