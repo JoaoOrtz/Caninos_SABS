@@ -1,3 +1,4 @@
+import { AlertSuccess } from '../../../../../shared/alert/success';
 import { deleteProduct } from '../../service/product.service';
 
 export const AlertDelete = (id, title, message) => { 
@@ -14,13 +15,14 @@ export const AlertDelete = (id, title, message) => {
     if (result.isConfirmed) {
       try {
         const response = await deleteProduct(id);
-        if (response.success === "success") {
+        if (response.data.status === "success") {
           Swal.fire({
             title: "¡Eliminado!",
             text: "El producto ha sido eliminado.",
-            icon: "success"
+            icon: "success",
+            showConfirmButton: false,
+            timer: 1500
           });
-          return true;
         }
       } catch (error) {
         Swal.fire({
@@ -28,7 +30,6 @@ export const AlertDelete = (id, title, message) => {
           text: error.message || "No se pudo eliminar el producto",
           icon: "error"
         });
-        return false;
       }
     }
   });

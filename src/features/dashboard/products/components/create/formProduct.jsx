@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom';
 import { getCategories, postProduct } from '../../service/product.service';
+import { AlertSuccess } from '../../../../../shared/alert/success';
 
 export const FormProduct = () => {
     const navegate = useNavigate()
@@ -40,6 +41,7 @@ export const FormProduct = () => {
         console.log(response);
         if (response.data.status === "success") {
             navegate('/dashboard/Productos')
+            AlertSuccess('Producto creado', 'El producto se a creado correctamente')
         }
 
     }

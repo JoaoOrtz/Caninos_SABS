@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { getCategories, getProduct, putProduct } from '../../service/product.service'
 import { useNavigate, useParams } from 'react-router-dom'
+import { AlertSuccess } from '../../../../../shared/alert/success'
 
 export const FormProductUpdate = () => {
     const navegate = useNavigate()
@@ -54,8 +55,8 @@ export const FormProductUpdate = () => {
         console.log(response);
         if (response.data.status === "success") {
             navegate('/dashboard/Productos')
+            AlertSuccess('Producto actualizado', 'El producto se a actualizado correctamente')
         }
-
     }
 
     const back = () => {

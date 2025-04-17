@@ -16,7 +16,7 @@ export const ProductDashboard = () => {
       setDataProducts(response.data.products)
     }
     data()
-  }, [])
+  }, [dataProducts])
 
   const viewForm = () =>{
     navegation('/dashboard/nuevo-producto')

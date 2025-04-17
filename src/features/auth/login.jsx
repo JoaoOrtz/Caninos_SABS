@@ -2,9 +2,10 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Landing } from "../landing/landing";
 import {PostLogin} from "./services/auth.services"
+import { AlertError } from "../../shared/alert/error";
 
 export const Login = () => {
-  const navigate=useNavigate()
+  const navigate = useNavigate()
   const [formData, setFormData] = useState({
     email: "",
     password: "",
@@ -26,7 +27,7 @@ export const Login = () => {
       navigate("/dashboard", { replace: true });
     }
     else{
-      alert('credenciales incorrectas')
+      AlertError('Error en las credenciales', 'El correo o la contraseña es invalida')
     }
   };
   return (
