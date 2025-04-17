@@ -1,6 +1,7 @@
+import { AlertSuccess } from '../../../../../shared/alert/success';
 import { deleteProduct } from '../../service/product.service';
 
-export const AlertDelete = (id, title, message, refreshData) => { 
+export const AlertDelete = (id, title, message) => { 
   Swal.fire({
     title: title,
     text: message,
@@ -22,7 +23,6 @@ export const AlertDelete = (id, title, message, refreshData) => {
             showConfirmButton: false,
             timer: 1500
           });
-          if (refreshData) refreshData();
         }
       } catch (error) {
         Swal.fire({

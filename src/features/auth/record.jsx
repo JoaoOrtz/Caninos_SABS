@@ -42,7 +42,7 @@ export const Record = () => {
   return (
     <>
       <Landing />
-      <div className="container-fluid vh-100 d-flex justify-content-center align-items-center bg-light">
+      <div className="container-fluid py-5 mt-3 d-flex justify-content-center align-items-center bg-light">
         <div className="row shadow rounded overflow-hidden" style={{ width: '900px', height: '500px' }}>
           {/* Imagen a la izquierda */}
           <div
@@ -57,8 +57,8 @@ export const Record = () => {
 
           {/* Formulario a la derecha */}
           <div className="col-md-6 bg-white p-5">
-            <h3 className="fw-bold">SIGN UP</h3>
-            <p className="text-muted mb-4">Sign up today to help dogs in your area.</p>
+            <h3 className="fw-bold">Registro</h3>
+            <p className="text-muted mb-4">¡Registrate para hacer tu primera compra!</p>
 
             {error && (
               <div className="alert alert-danger" role="alert">
@@ -106,9 +106,9 @@ export const Record = () => {
                 />
               </div>
               <div className="form-check mb-3">
-                <input className="form-check-input" type="checkbox" id="newsletter" />
+                <input className="form-check-input border-1 border-info" type="checkbox" id="newsletter" />
                 <label className="form-check-label" htmlFor="newsletter">
-                  Subscribe me to the newsletter
+                  Acepto términos y condiciones
                 </label>
               </div>
               <button type="submit" className="btn btn-primary w-100 rounded-pill">

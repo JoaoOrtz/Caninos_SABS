@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Landing } from "../landing/landing";
 import {PostLogin} from "./services/auth.services"
 import { AlertError } from "../../shared/alert/error";
@@ -33,7 +33,7 @@ export const Login = () => {
   return (
     <>
       <Landing />
-      <div className="container-fluid vh-100 d-flex justify-content-center align-items-center bg-light">
+      <div className="container-fluid py-5 mt-3 d-flex justify-content-center align-items-center bg-light">
         <div
           className="row shadow rounded overflow-hidden"
           style={{ width: "900px", height: "500px" }}
@@ -51,9 +51,9 @@ export const Login = () => {
 
           {/* Formulario de Login */}
           <div className="col-md-6 bg-white p-5">
-            <h3 className="fw-bold">LOGIN</h3>
+            <h3 className="fw-bold">Inicio Sesión</h3>
             <p className="text-muted mb-4">
-              Welcome back! Please login to your account.
+              ¡Bienvenido! Ingresa a tu cuenta.
             </p>
 
             <form onSubmit={handleSubmit}>
@@ -83,10 +83,13 @@ export const Login = () => {
                 />
               </div>
 
+              <p>¿No tienes una cuenta?<Link class="link-offset-2 link-underline link-underline-opacity-50" to="/Registrarse" ><br />¡Registrate acá!</Link></p>
+
               <button
                 type="submit"
                 className="btn btn-primary w-100 rounded-pill"
               >
+                
                 INICIAR SESIÓN
               </button>
             </form>

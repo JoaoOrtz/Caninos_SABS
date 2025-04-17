@@ -30,15 +30,9 @@ export const Home = () => {
                 Bienvenido a Caninos SABS
               </h1>
               <p className="fs-5">
-                Caninos SABS es una empresa colombiana dedicada al cuidado
-                integral de los animales de compañía. Combinamos tecnología,
-                amor por las mascotas y un enfoque profesional para ofrecer
-                productos innovadores, servicios veterinarios especializados y
-                atención personalizada. <br /> Nuestra plataforma te permite descubrir
-                nuestros servicios, explorar productos de alta calidad y conocer
-                todo lo que hacemos para mejorar la vida de tu mejor amigo
-                peludo. En Caninos SABS, tu mascota es parte de nuestra familia.
-                🐶🐾
+              Caninos SABS es una empresa colombiana dedicada al cuidado integral de los animales de compañía. Combinamos tecnología, amor por las mascotas y un enfoque profesional para ofrecer productos innovadores, atención personalizada y soluciones confiables para tu mejor amigo peludo. <br /><br />
+
+              Nuestra plataforma te permite explorar una amplia variedad de productos de alta calidad, conocer nuestras categorías especializadas y descubrir empresas aliadas que comparten nuestro compromiso con el bienestar animal. En Caninos SABS, tu mascota es parte de nuestra familia. 🐶🐾
               </p>
 
               <div className="d-flex flex-column flex-md-row gap-3 justify-content-center justify-content-md-start mb-3">
@@ -76,12 +70,10 @@ export const Home = () => {
                     <FaDog />
                   </i>
                   <h5 className="card-title mt-3 text-white">
-                    Consulta Veterinaria
+                  Productos de cuidado y bienestar
                   </h5>
                   <p className="card-text">
-                    Nuestro servicio de consulta veterinaria está enfocado en el
-                    cuidado integral y preventivo de tu mascota. Contamos con
-                    profesionales capacitados.
+                  Encuentra productos pensados para el cuidado diario y la salud de tus animales, seleccionados cuidadosamente.
                   </p>
                 </div>
               </div>
@@ -109,12 +101,10 @@ export const Home = () => {
                     <FaCat />
                   </i>
                   <h5 className="card-title mt-3 text-white">
-                    Spa y peluquería
+                  Empresas aliadas
                   </h5>
                   <p className="card-text">
-                    Sabemos que tu mascota merece lo mejor, por eso ofrecemos un
-                    servicio de peluquería y spa pensado para consentirla al
-                    máximo.{" "}
+                  Trabajamos con empresas que comparten nuestra pasión por el bienestar animal, ofreciendo productos certificados y de alta calidad para tu mascota.
                   </p>
                 </div>
               </div>

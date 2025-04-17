@@ -20,7 +20,7 @@ export const About = () => {
             </div>
             <div className="col-md-6 p-4">
               <h1 className='title text-primary'>¡Sobre Nosotros!</h1>
-              <p>Caninos SABS es una empresa colombiana fundada en 2015, especializada en el desarrollo, comercialización y distribución de productos y servicios para el cuidado integral de mascotas. <br /><br /> Nuestro objetivo es mejorar la calidad de vida de los animales de compañía y facilitar a sus dueños el acceso a soluciones innovadoras y confiables. <br /> <br /> Caninos SABS tiene su sede principal en Medellín, Antioquia, con cobertura de servicios a nivel nacional y planes de expansión a otros países de Latinoamérica.</p>
+              <p>Caninos SABS es una empresa colombiana fundada en 2015, especializada en el desarrollo, comercialización y distribución de productos para el cuidado integral de mascotas. <br /><br /> Nuestro objetivo es mejorar la calidad de vida de los animales de compañía y facilitar a sus dueños el acceso a soluciones innovadoras, confiables y de alta calidad, en alianza con empresas comprometidas con el bienestar animal. <br /><br /> Caninos SABS tiene su sede principal en Medellín, Antioquia, con cobertura nacional y planes de expansión hacia otros países de Latinoamérica.</p>
 
               <div className="row text-center my-3 ">
 
@@ -66,31 +66,31 @@ export const About = () => {
           <div className="row text-center">
 
             <div className="col-lg-4 col-sm-6 my-2">
-              <div className="card portfolio-card">
+              <div className="card portfolio-card shadow-lg p-3 rounded">
                 <img src="../../../public/img/card1.jpg" className='img-fluid w-100'/>
                 <div className="portfolio-description">
                   <h5 className='card-title mt-3'>Misión</h5>
-                  <p>Brindar soluciones integrales y de alta calidad para el bienestar de las mascotas, mediante la comercialización de productos innovadores y la prestación de servicios veterinarios especializados, promoviendo el cuidado responsable.</p>
+                  <p>Brindar soluciones integrales y de alta calidad para el bienestar de las mascotas mediante la comercialización de productos innovadores, promoviendo el cuidado responsable. Nos esforzamos por ofrecer una experiencia confiable y tecnológica que facilite a las mascotas el acceso a lo mejor del mercado.</p>
                 </div>
               </div>
             </div>
 
-            <div className="col-lg-4 col-sm-6 my-2">
-              <div className="card portfolio-card">
+            <div className="col-lg-4 col-sm-7 my-2">
+              <div className="card portfolio-card shadow-lg p-3 rounded">
                 <img src="../../../public/img/card2.jpg" className='img-fluid w-100'/>
                 <div className="portfolio-description">
                   <h5 className='card-title mt-3'>Visión</h5>
-                  <p>Ser la empresa líder en Colombia y referente en Latinoamérica en el sector de cuidado animal, reconocida por su compromiso con la salud, el bienestar y la felicidad de las mascotas, mediante el uso de tecnología, innovación y un enfoque humano y ético.</p>
+                  <p>Ser la empresa líder en Colombia en el sector de productos para el cuidado animal, reconocida por su compromiso con la innovación, el bienestar de las mascotas y su enfoque ético. Aspiramos a transformar la forma en que los dueños de mascotas acceden a productos de calidad.</p>
                 </div>
               </div>
             </div>
 
             <div className="col-lg-4 col-sm-6 my-2">
-              <div className="card portfolio-card">
+              <div className="card portfolio-card shadow-lg p-3 rounded">
                 <img src="../../../public/img/card3.jpg" className='img-fluid w-100'/>
                 <div className="portfolio-description">
                   <h5 className='card-title mt-3'>Objetivo</h5>
-                  <p>Consolidarnos como una plataforma integral que facilite la gestión y acceso a productos y servicios de alta calidad para el bienestar animal, mediante el uso de tecnología, innovación y un enfoque centrado en la satisfacción de nuestros clientes y el cuidado responsable de las mascotas.</p>
+                  <p>Consolidarnos como una plataforma integral que facilite el acceso a productos de alta calidad y promueva alianzas estratégicas con empresas del sector, a través del uso de tecnología y un enfoque centrado en la satisfacción de nuestros clientes y el bienestar animal.</p>
                 </div>
               </div>
             </div>
