@@ -46,7 +46,7 @@ export const Layout = () => {
           </div>
 
           {/* Contenido iterativo (Outlet) */}
-          <div className="p-3 flex-grow-1">
+          <div className="p-4 flex-grow-1">
             <Outlet />
           </div>
         </div>

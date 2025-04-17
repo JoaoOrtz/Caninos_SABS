@@ -27,27 +27,27 @@ export const Landing = () => {
             <ul className="navbar-nav ms-auto align-items-center">
               <li className="nav-item">
                 <Link className="nav-link active" to="/">
-                  Home
+                  Inicio
                 </Link>
               </li>
               <li className="nav-item">
                 <Link className="nav-link active" to="/Sobre-Nosotros">
-                  About Us
+                  ¿Quiénes Somos?
                 </Link>
               </li>
               <li className="nav-item">
                 <Link className="nav-link active" to="/productos">
-                  Products
+                  Nuestros Productos
                 </Link>
               </li>
               <li className="nav-item">
                 <Link className="nav-link active" to="/Servicios">
-                  Services
+                  Nuestros empresas
                 </Link>
               </li>
               <li className="nav-item">
                 <Link className="nav-link active" to="/Categorias">
-                  Categories
+                  Nuestras Categorías
                 </Link>
               </li>
 
