@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { getProducts } from "./service/product.service";
+import { getCategories, getProductbyCategoryID, getProducts } from "./service/product.service";
 import { MdDelete } from "react-icons/md";
 import { RiEditBoxLine } from "react-icons/ri";
 import { AlertDelete } from "./components/delete/delete";
@@ -9,7 +9,11 @@ import { SeeProduct } from "./components/see/see.product";
 export const ProductDashboard = () => {
   const navegation = useNavigate()
   const [dataProducts, setDataProducts] = useState([])
+  const [categories, setCategories] = useState([])
+  const [category, setCategory] = useState([])
+  const [categoryId, setCategoryId] = useState()
 
+  //Trae los productos
   useEffect(() => {
     const data = async () => {
       const response = await getProducts()
@@ -18,62 +22,109 @@ export const ProductDashboard = () => {
     data()
   }, [dataProducts])
 
-  const viewForm = () =>{
+  //Trae las categorias
+  useEffect(() => {
+    const data = async () => {
+      const response = await getCategories()
+      setCategories(response.data.categories)
+    }
+    data()
+  }, [categories])
+
+  //Trae una categoria
+  useEffect(() => {
+    const data = async () => {
+      const response = await getProductbyCategoryID(categoryId)
+      setCategory(response.data.products)
+    }
+    data()
+  }, [categoryId])
+
+  const viewForm = () => {
     navegation('/dashboard/nuevo-producto')
   }
 
-  const viewUpdate = (id) =>{
-    navegation('/dashboard/editar-producto/'+id)
+  const viewUpdate = (id) => {
+    navegation('/dashboard/editar-producto/' + id)
   }
 
   return (
     <>
-      <div className="row g-3 p-2 align-items-center">
-        <div className="col-auto">
-        <h2>Lista De Productos</h2>
+      <div className="container-fluid">
+        <div className="row g-3 p-2 align-items-center">
+          <div className="col">
+            <h2>Lista De Productos</h2>
+          </div>
+          <div className="col-auto ms-auto">
+            <button type="button" className="btn btn-primary" onClick={viewForm}>Nuevo producto</button>
+          </div>
         </div>
-        <div className="col-auto ms-auto">
-          <button type="button" className="btn btn-primary" onClick={viewForm}>Nuevo producto</button>
+
+        <div className="row g-2 p-2">
+          <div className="col-md-4 col-sm-12">
+            <select
+              className="form-select shadow-sm"
+              style={{ borderRadius: "8px" }}
+              aria-label="Filtrar por categoría"
+              onChange={(e) => setCategoryId(e.target.value)}
+            >
+              <option key={0} value={0}>Todas las categorías</option>
+              {categories.map((e) => (
+                <option key={e.id} value={e.id}>{e.name}</option>
+              ))}
+            </select>
+          </div>
         </div>
-      </div>
-      <div className="card">
-        <table className="table">
-          <thead>
-            <tr>
-              <th scope="col">#</th>
-              <th scope="col">Nombre</th>
-              <th scope="col">Descripcion</th>
-              <th scope="col">Precio</th>
-              <th scope="col">Cantidad</th>
-              <th scope="col">Imagen</th>
-              <th scope="col">Categoria</th>
-              <th scope="col">Acciones</th>
-            </tr>
-          </thead>
-          <tbody>
-            {dataProducts.map((e, i) => (
-              <tr key={i}>
-                <td>{e.id}</td>
-                <td>{e.name}</td>
-                <td>{e.description}</td>
-                <td>{e.price}</td>
-                <td>{e.stock}</td>
-                <td>
-                  {e.urlImage ? (<img src={e.urlImage} alt={`Imagen de ${e.nombre}`} style={{ width: "50px", height: "auto" }} />) : (<span>No hay imagen</span>)}
-                </td>
-                <td>{e.category.name}</td>
-                <td>
-                  <div className="btn-group" role="group" aria-label="Basic mixed styles example">
-                    <button type="button" className="btn btn-danger" onClick={() => AlertDelete(e.id, "¿De seguro quieres eliminar el producto?", `El producto que quieres eliminar es ${e.name}`)}><MdDelete /></button>
-                    <SeeProduct id={e.id} />
-                    <button type="button" className="btn btn-success" onClick={()=> viewUpdate(e.id)}><RiEditBoxLine /></button>
-                  </div>
-                </td>
+
+        <div className="table-responsive">
+          <table className="table table-hover align-middle shadow-sm" style={{ backgroundColor: "#fff", borderRadius: "8px", overflow: "hidden" }}>
+            <thead style={{ backgroundColor: "#f0f0f0" }}>
+              <tr>
+                <th>#</th>
+                <th>Nombre</th>
+                <th>Descripción</th>
+                <th>Precio</th>
+                <th>Cantidad</th>
+                <th>Imagen</th>
+                <th>Categoría</th>
+                <th>Acciones</th>
               </tr>
-            ))}
-          </tbody>
-        </table>
+            </thead>
+            <tbody>
+              {(categoryId ? category : dataProducts).map((e, i) => (
+                <tr key={i}>
+                  <td>{e.id}</td>
+                  <td>{e.name}</td>
+                  <td style={{ maxWidth: "250px", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>
+                    {e.description}
+                  </td>
+                  <td>${e.price}</td>
+                  <td>{e.stock}</td>
+                  <td>
+                    {e.imageUrl
+                      ? (<img src={e.imageUrl} alt={`Imagen de ${e.name}`} style={{ width: "40px", height: "auto", borderRadius: "4px" }} />)
+                      : (<span className="text-muted">Sin imagen</span>)}
+                  </td>
+                  <td>{e.category?.name || "Sin categoría"}</td>
+                  <td>
+                    <div className="btn-group" role="group">
+                      <button type="button" className="btn btn-outline-danger btn-sm"
+                        onClick={() => AlertDelete(e.id, "¿De seguro quieres eliminar el producto?", `El producto que quieres eliminar es ${e.name}`)}>
+                        <MdDelete />
+                      </button>
+                      <SeeProduct id={e.id} />
+                      <button type="button" className="btn btn-outline-success btn-sm" onClick={() => viewUpdate(e.id)}>
+                        <RiEditBoxLine />
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
       </div>
+
     </>
   );
 };

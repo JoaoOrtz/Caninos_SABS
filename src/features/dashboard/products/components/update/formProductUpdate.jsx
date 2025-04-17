@@ -43,6 +43,7 @@ export const FormProductUpdate = () => {
     //Funcion para recolección los datos
     const ChangeData = (e) => {
         const { name, value } = e.target
+        console.log(name, value);
         setFormProduct({
             ...formProduct,
             [name]: value
@@ -52,7 +53,6 @@ export const FormProductUpdate = () => {
     const HandleSubmint = async (e) => {
         e.preventDefault()
         const response = await putProduct(id, formProduct)
-        console.log(response);
         if (response.data.status === "success") {
             navegate('/dashboard/Productos')
             AlertSuccess('Producto actualizado', 'El producto se a actualizado correctamente')

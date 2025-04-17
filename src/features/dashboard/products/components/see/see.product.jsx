@@ -13,21 +13,36 @@ export const SeeProduct = ({ id }) => {
         fetchData();
     }, [id]);
 
+    // Usa el ID del producto para crear un ID único para el modal
+    const modalId = `productModal-${id}`;
+
     return (
         <>
-            <button type="button" className="btn btn-warning" data-bs-toggle="modal" data-bs-target="#productModal">
+            <button 
+                type="button" 
+                className="btn btn-outline-warning" 
+                data-bs-toggle="modal" 
+                data-bs-target={`#${modalId}`}
+            >
                 <FiEye />
             </button>
 
-            <div className="modal fade" id="productModal" tabIndex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                <div className="modal-dialog modal-lg"> {/* ancho más amplio */}
+            <div 
+                className="modal fade" 
+                id={modalId} 
+                tabIndex="-1" 
+                aria-labelledby={`exampleModalLabel-${id}`} 
+                aria-hidden="true"
+            >
+                <div className="modal-dialog modal-lg">
                     <div className="modal-content">
                         <div className="modal-header">
-                            <h1 className="modal-title fs-5" id="exampleModalLabel">Ver producto</h1>
+                            <h1 className="modal-title fs-5" id={`exampleModalLabel-${id}`}>
+                                Ver producto
+                            </h1>
                             <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
 
-                        {/* Contenedor scroll horizontal */}
                         <div className="modal-body" style={{ overflowX: 'auto' }}>
                             {dataProduct ? (
                                 <table className="table table-bordered">
@@ -50,9 +65,9 @@ export const SeeProduct = ({ id }) => {
                                             <td>${dataProduct.price}</td>
                                             <td>{dataProduct.stock}</td>
                                             <td>
-                                                {dataProduct.urlImage ? (
+                                                {dataProduct.imageUrl ? (
                                                     <img
-                                                        src={dataProduct.urlImage}
+                                                        src={dataProduct.imageUrl}
                                                         alt={`Imagen de ${dataProduct.name}`}
                                                         style={{ width: "50px", height: "auto" }}
                                                     />
