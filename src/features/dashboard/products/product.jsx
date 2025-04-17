@@ -20,7 +20,7 @@ export const ProductDashboard = () => {
       setDataProducts(response.data.products)
     }
     data()
-  }, [dataProducts])
+  }, [])
 
   //Trae las categorias
   useEffect(() => {
@@ -29,7 +29,7 @@ export const ProductDashboard = () => {
       setCategories(response.data.categories)
     }
     data()
-  }, [categories])
+  }, [])
 
   //Trae una categoria
   useEffect(() => {
@@ -37,7 +37,7 @@ export const ProductDashboard = () => {
       const response = await getProductbyCategoryID(categoryId)
       setCategory(response.data.products)
     }
-    data()
+    if (categoryId) data();
   }, [categoryId])
 
   const viewForm = () => {
@@ -109,7 +109,24 @@ export const ProductDashboard = () => {
                   <td>
                     <div className="btn-group" role="group">
                       <button type="button" className="btn btn-outline-danger btn-sm"
-                        onClick={() => AlertDelete(e.id, "¿De seguro quieres eliminar el producto?", `El producto que quieres eliminar es ${e.name}`)}>
+                        onClick={() => AlertDelete(
+                          e.id, 
+                          "¿De seguro quieres eliminar el producto?", 
+                          `El producto que quieres eliminar es ${e.name}`,
+                          () => {
+                            // Si estamos viendo una categoría específica, recargamos esos productos
+                            if (categoryId) {
+                              getProductbyCategoryID(categoryId).then(response => {
+                                setCategory(response.data?.products || []);
+                              });
+                            } else {
+                              // Si estamos viendo todos los productos, recargamos todos
+                              getProducts().then(response => {
+                                setDataProducts(response.data.products);
+                              });
+                            }
+                          }
+                        )}>
                         <MdDelete />
                       </button>
                       <SeeProduct id={e.id} />

@@ -80,14 +80,9 @@
             return getProducts();
         }
         try {
-            const response = await axios.get(`http://localhost:3030/products/category/${id}`)
-            console.log(response);
-            
-            return response
+            const response = await axios.get(`http://localhost:3030/products/category/${id}`);
+            return response.data.products ? response : { data: { products: [] } };
         } catch (error) {
-            return {
-                success: false,
-                message: "Lo sentimos, se ha producido un error"
-            }
+            return { data: { products: [] } }; // Devuelve una estructura consistente
         }
     }

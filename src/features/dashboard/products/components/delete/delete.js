@@ -1,7 +1,7 @@
 import { AlertSuccess } from '../../../../../shared/alert/success';
 import { deleteProduct } from '../../service/product.service';
 
-export const AlertDelete = (id, title, message) => { 
+export const AlertDelete = (id, title, message, refreshData) => { 
   Swal.fire({
     title: title,
     text: message,
@@ -23,6 +23,8 @@ export const AlertDelete = (id, title, message) => {
             showConfirmButton: false,
             timer: 1500
           });
+          // Llama a la función para actualizar los datos
+          if (refreshData) refreshData();
         }
       } catch (error) {
         Swal.fire({
