@@ -22,6 +22,12 @@ export const Layout = () => {
           <button className="btn btn-outline-primary d-md-none" onClick={toggleSidebar}>
             ☰
           </button>
+          <img
+            src="/img/Logo.png"
+            className="rounded d-block"
+            alt="Logo Caninos"
+            style={{ width: "60px", height: "auto" }}
+          />
           <p className="h5 fw-semibold m-0">Bienvenido</p>
         </div>
         <button onClick={logout} className="btn btn-danger">
