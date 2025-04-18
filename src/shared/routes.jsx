@@ -18,6 +18,8 @@ import { ServiceDashboard } from "../features/dashboard/services/service";
 import { PrivateRoute } from "../features/dashboard/components/privateRoutes";  // Si usas PrivateRoute
 import { FormProduct } from "../features/dashboard/products/components/create/formProduct";
 import { FormProductUpdate } from "../features/dashboard/products/components/update/formProductUpdate";
+import { CreateUser } from "../features/dashboard/Users/components/create/createUsers";
+import { FormUserUpdate } from "../features/dashboard/Users/components/update/updateUsers";
 import { FormRols } from "../features/dashboard/roles/components/create/formRoles";
 import { FormRolUpdate } from "../features/dashboard/roles/components/update/formRolUpdate";
 
@@ -48,7 +50,9 @@ export const RouteComponent = () => {
             </PrivateRoute>
           }
         >
-          <Route path="Usuarios" element={<UserDashboard />} />
+          <Route path="Usuarios" element={<UserDashboard />} /> 
+          <Route path="nuevo-user" element={<CreateUser/>} />
+          <Route path="editar-user/:id" element={<FormUserUpdate/>} />
           <Route path="Roles" element={<RoleDashboard />} />
           <Route path="nuevo-Rol" element={<FormRols/>} />
           <Route path="editar-Rol/:id" element={<FormRolUpdate/>} />
