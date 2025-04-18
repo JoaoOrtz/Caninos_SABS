@@ -180,4 +180,7 @@ $RECYCLE.BIN/
 # Windows shortcuts
 *.lnk
 
+#ignore del Node_Module Dentro de Api
+Api/node_modules/
+
 # End of https://www.toptal.com/developers/gitignore/api/windows,react,node

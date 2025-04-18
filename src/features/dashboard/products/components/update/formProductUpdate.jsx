@@ -55,7 +55,7 @@ export const FormProductUpdate = () => {
         const response = await putProduct(id, formProduct)
         if (response.data.status === "success") {
             navegate('/dashboard/Productos')
-            AlertSuccess('Producto actualizado', 'El producto se a actualizado correctamente')
+            AlertSuccess('Producto actualizado', 'El producto se ha actualizado correctamente')
         }
     }
 

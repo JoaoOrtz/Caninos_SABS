@@ -6,8 +6,8 @@
         return response
     } catch (error) {
         return {
-            succes: false,
-            message: "Lo sentimos, se a producido un error"
+            success: false,
+            message: "Lo sentimos, se ha producido un error"
         }
     }
     }
@@ -18,8 +18,8 @@
         return response
         } catch (error) {
         return {
-            succes: false,
-            message: "Lo sentimos, se a producido un error"
+            success: false,
+            message: "Lo sentimos, se ha producido un error"
         }
         }
     }

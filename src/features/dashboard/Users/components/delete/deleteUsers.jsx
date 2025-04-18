@@ -1,6 +1,6 @@
-import { deleteProduct } from '../../service/product.service';
+import { deleteUsers } from '../../services/users.service';
 
-export const AlertDelete = (id, title, message, refreshData) => { 
+export const AlertDelete = (id, title, message) => { 
   Swal.fire({
     title: title,
     text: message,
@@ -13,22 +13,20 @@ export const AlertDelete = (id, title, message, refreshData) => {
   }).then(async (result) => {
     if (result.isConfirmed) {
       try {
-        const response = await deleteProduct(id);
+        const response = await deleteUsers(id);
         if (response.data.status === "success") {
           Swal.fire({
             title: "¡Eliminado!",
-            text: "El producto ha sido eliminado.",
+            text: "El Usuario ha sido eliminado.",
             icon: "success",
             showConfirmButton: false,
             timer: 1500
           });
-          // Llama a la función para actualizar los datos
-          if (refreshData) refreshData();
         }
       } catch (error) {
         Swal.fire({
           title: "Error",
-          text: error.message || "No se pudo eliminar el producto",
+          text: error.message || "No se pudo eliminar el usurio",
           icon: "error"
         });
       }

@@ -17,7 +17,14 @@ import { CategoryDashboard } from "../features/dashboard/categories/category";
 import { PrivateRoute } from "../features/dashboard/components/privateRoutes";  // Si usas PrivateRoute
 import { FormProduct } from "../features/dashboard/products/components/create/formProduct";
 import { FormProductUpdate } from "../features/dashboard/products/components/update/formProductUpdate";
+<<<<<<< HEAD
 import { ObjectVision } from "../features/dashboard/objetivevision/objetiveVision";
+=======
+import { CreateUser } from "../features/dashboard/Users/components/create/createUsers";
+import { FormUserUpdate } from "../features/dashboard/Users/components/update/updateUsers";
+import { FormRols } from "../features/dashboard/roles/components/create/formRoles";
+import { FormRolUpdate } from "../features/dashboard/roles/components/update/formRolUpdate";
+>>>>>>> 55c33e550369caa6e8eaee7625650775753cdca5
 
 export const RouteComponent = () => {
   return (
@@ -46,8 +53,12 @@ export const RouteComponent = () => {
             </PrivateRoute>
           }
         >
-          <Route path="Usuarios" element={<UserDashboard />} />
+          <Route path="Usuarios" element={<UserDashboard />} /> 
+          <Route path="nuevo-user" element={<CreateUser/>} />
+          <Route path="editar-user/:id" element={<FormUserUpdate/>} />
           <Route path="Roles" element={<RoleDashboard />} />
+          <Route path="nuevo-Rol" element={<FormRols/>} />
+          <Route path="editar-Rol/:id" element={<FormRolUpdate/>} />
           <Route path="Compañias" element={<CompanyDashboard />} />
           <Route path="Productos" element={<ProductDashboard />} />
           <Route path="nuevo-producto" element={<FormProduct />} />
