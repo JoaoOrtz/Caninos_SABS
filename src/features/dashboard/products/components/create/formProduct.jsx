@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { use, useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom';
 import { getCategories, postProduct } from '../../service/product.service';
 import { AlertSuccess } from '../../../../../shared/alert/success';
@@ -17,6 +17,13 @@ export const FormProduct = () => {
     })
 
     const [categories, setCategories] = useState([])
+
+    const [alertError, setAlertError] = useState({
+        show: false,
+        title: "",
+        message: "",
+        type: "warning"
+    });
 
     useEffect(() => {
         const data = async () => {
@@ -37,6 +44,9 @@ export const FormProduct = () => {
 
     const HandleSubmint = async (e) => {
         e.preventDefault()
+        if (!validateForm()) {
+            return;
+        }
         const response = await postProduct(formProduct)
         console.log(response);
         if (response.data.status === "success") {
@@ -45,6 +55,62 @@ export const FormProduct = () => {
         }
 
     }
+
+    //Validacion de datos vacios
+    const validateForm = () => {
+        // Verificar campos obligatorios
+        if (!formProduct.name.trim()) {
+            setAlertError({
+                show: true,
+                title: "Error",
+                message: "El nombre del producto es obligatorio",
+                type: "danger"
+            });
+            return false;
+        }
+
+        if (!formProduct.description.trim()) {
+            setAlertError({
+                show: true,
+                title: "Error",
+                message: "La descripción del producto es obligatorio",
+                type: "danger"
+            });
+            return false;
+        }
+
+        if (!formProduct.price || parseInt(formProduct.price) <= 0) {
+            setAlertError({
+                show: true,
+                title: "Error",
+                message: "El precio del producto es obligatorio",
+                type: "danger"
+            });
+            return false;
+        }
+
+        if (!formProduct.stock || parseInt(formProduct.stock) < 0) {
+            setAlertError({
+                show: true,
+                title: "Error",
+                message: "La cantidad del producto es obligatorio",
+                type: "danger"
+            });
+            return false;
+        }
+
+        if (!formProduct.categoryId || formProduct.categoryId === "0") {
+            setAlertError({
+                show: true,
+                title: "Error",
+                message: "Debe seleccionar una categoría",
+                type: "danger"
+            });
+            return false;
+        }
+
+        return true; // Todos los campos son válidos
+    };
 
     const back = () => {
         navegate('/dashboard/Productos')
@@ -75,6 +141,12 @@ export const FormProduct = () => {
             </button>
             <div className="container">
                 <h2 className="mb-4 mt-3">Formulario de Producto</h2>
+                {/* Mensaje de error para productos */}
+                {alertError.show && (
+                    <div className={`alert alert-${alertError.type} alert-dismissible fade show mb-2`} role="alert">
+                        <strong>{alertError.title}</strong> {alertError.message}
+                    </div>
+                )}
                 <form onSubmit={HandleSubmint}>
                     <div className="mb-3">
                         <label htmlFor="nombre" className="form-label">Nombre</label>
