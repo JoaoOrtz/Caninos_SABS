@@ -1,6 +1,7 @@
 import React from 'react'
 
-export const ServiceDashboard = () => {
+export const ObjectVision = () => {
+  
   return (
     <div>service</div>
   )
