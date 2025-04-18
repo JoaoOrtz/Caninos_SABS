@@ -78,8 +78,9 @@ export const Landing = () => {
           </div>
         </div>
       </nav>
-
-      <Outlet />
+      <div className="conteiner p-5">
+        <Outlet /> 
+      </div>
 
       {/* footer */}
       <footer className="bg-primary text-white text-center py-3 mt-auto">
