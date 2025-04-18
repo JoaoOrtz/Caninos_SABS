@@ -18,6 +18,8 @@ import { ServiceDashboard } from "../features/dashboard/services/service";
 import { PrivateRoute } from "../features/dashboard/components/privateRoutes";  // Si usas PrivateRoute
 import { FormProduct } from "../features/dashboard/products/components/create/formProduct";
 import { FormProductUpdate } from "../features/dashboard/products/components/update/formProductUpdate";
+import { FormRols } from "../features/dashboard/roles/components/create/formRoles";
+import { FormRolUpdate } from "../features/dashboard/roles/components/update/formRolUpdate";
 
 export const RouteComponent = () => {
   return (
@@ -48,6 +50,8 @@ export const RouteComponent = () => {
         >
           <Route path="Usuarios" element={<UserDashboard />} />
           <Route path="Roles" element={<RoleDashboard />} />
+          <Route path="nuevo-Rol" element={<FormRols/>} />
+          <Route path="editar-Rol/:id" element={<FormRolUpdate/>} />
           <Route path="Compañias" element={<CompanyDashboard />} />
           <Route path="Productos" element={<ProductDashboard />} />
           <Route path="nuevo-producto" element={<FormProduct />} />

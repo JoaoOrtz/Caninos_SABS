@@ -41,7 +41,7 @@ export const FormProduct = () => {
         console.log(response);
         if (response.data.status === "success") {
             navegate('/dashboard/Productos')
-            AlertSuccess('Producto creado', 'El producto se a creado correctamente')
+            AlertSuccess('Producto creado', 'El producto se ha creado correctamente')
         }
 
     }

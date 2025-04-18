@@ -1,6 +1,6 @@
-import { deleteProduct } from '../../service/product.service';
+import { deleteRol } from '../../service/roles.service';
 
-export const AlertDelete = (id, title, message, refreshData) => { 
+export const AlertDeleteRol = (id, title, message, refreshData) => { 
   Swal.fire({
     title: title,
     text: message,
@@ -13,11 +13,11 @@ export const AlertDelete = (id, title, message, refreshData) => {
   }).then(async (result) => {
     if (result.isConfirmed) {
       try {
-        const response = await deleteProduct(id);
-        if (response.data.status === "success") {
+        const response = await deleteRol(id);
+        if (response.status === 200) {
           Swal.fire({
             title: "¡Eliminado!",
-            text: "El producto ha sido eliminado.",
+            text: "El rol ha sido eliminado.",
             icon: "success",
             showConfirmButton: false,
             timer: 1500
