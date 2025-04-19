@@ -53,9 +53,6 @@ export const Layout = () => {
             <li className="nav-item">
               <Link to="/dashboard/Categorias" className="nav-link text-white">Categorías</Link>
             </li>
-            <li className="nav-item">
-              <Link to="/dashboard/Servicios" className="nav-link text-white">Servicios</Link>
-            </li>
           </ul>
         </nav>
 

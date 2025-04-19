@@ -13,7 +13,7 @@ export const CreateUser = () => {
     email: "",
     password: "",  // Campo de contraseña
     roleId: 0,
-    companyId: "",
+    companyId: ""
   });
 
   const [roles, setRoles] = useState([]);

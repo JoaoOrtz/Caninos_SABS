@@ -22,6 +22,8 @@ import { CreateUser } from "../features/dashboard/Users/components/create/create
 import { FormUserUpdate } from "../features/dashboard/Users/components/update/updateUsers";
 import { FormRols } from "../features/dashboard/roles/components/create/formRoles";
 import { FormRolUpdate } from "../features/dashboard/roles/components/update/formRolUpdate";
+import { CreateCategorie } from "../features/dashboard/categories/components/create/createCategorie";
+import { UpdateCategorie } from "../features/dashboard/categories/components/update/UpdateCategorie";
 
 
 export const RouteComponent = () => {
@@ -61,7 +63,9 @@ export const RouteComponent = () => {
           <Route path="Productos" element={<ProductDashboard />} />
           <Route path="nuevo-producto" element={<FormProduct />} />
           <Route path="editar-producto/:id" element={<FormProductUpdate />} />
-          <Route path="Categorias" element={<CategoryDashboard />} />
+          <Route path="categorias" element={<CategoryDashboard />} />
+          <Route path="nueva-categoria" element={<CreateCategorie/>} />
+          <Route path="editar-categoria/:id" element={<UpdateCategorie/>} />
           <Route path="Objetico-Vision" element={<ObjectVision />} />
         </Route>
       </Routes>
