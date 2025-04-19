@@ -3,7 +3,6 @@ import axios from "axios";
 export const getRols = async () => {
     try {
         const response = await axios.get('http://localhost:3030/roles')
-        console.log(response)
         return response
     } catch (error) {
         return {
@@ -15,7 +14,6 @@ export const getRols = async () => {
 
 export const postRol = async (data) => {
     try {
-        console.log(data)
         const response = await axios.post('http://localhost:3030/roles', data)
         return response
     }catch (error) {
@@ -29,7 +27,6 @@ export const postRol = async (data) => {
 export const deleteRol = async (id) => {
     try {
     const response = await axios.delete('http://localhost:3030/roles/'+id)
-    console.log(response)
     return response
     } catch (error) {
         return {

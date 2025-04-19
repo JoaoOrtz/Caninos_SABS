@@ -186,6 +186,7 @@ export const FormProduct = () => {
             </button>
             <div className="container">
                 <h2 className="mb-4 mt-3">Formulario de Producto</h2>
+                
                 {/* Mensaje de error para productos */}
                 {alertError.show && (
                     <div className={`alert alert-${alertError.type} alert-dismissible fade show mb-2`} role="alert">
