@@ -13,4 +13,16 @@ const PostLogin = async (data) => {
   }
 };
 
+export const getLogin = async () => {
+    try {
+        const response = await axios.get('http://localhost:3030/login')
+        return response.data
+    } catch (error) {
+        return {
+            success: false,
+            message: "Lo sentimos, se ha producido un error"
+        }
+    }
+}
+
 export {PostLogin}

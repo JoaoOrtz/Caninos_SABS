@@ -15,6 +15,8 @@ export const getUsers = async () => {
 
 export const postUsers = async (data) => {
   try {
+    console.log(data);
+    
     const response = await axios.post("http://localhost:3030/users", data);
     return response;
   } catch (error) {

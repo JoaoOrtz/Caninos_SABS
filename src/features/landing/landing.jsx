@@ -1,5 +1,6 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Link, Outlet } from "react-router-dom";
+import { getRole } from "../dashboard/layout.service";
 
 // icon react
 import { IoPerson } from "react-icons/io5";
@@ -50,35 +51,21 @@ export const Landing = () => {
                   Nuestras Categorías
                 </Link>
               </li>
-
-              {/* Dropdown */}
-              <li className="nav-item dropdown ">
-                <button
-                  className="btn btn-info dropdown-toggle text-white"
-                  type="button"
-                  data-bs-toggle="dropdown"
-                  aria-expanded="false"
-                >
-                  <IoPerson />
-                </button>
-                <ul className="dropdown-menu dropdown-menu-end">
-                  <li>
-                    <Link className="dropdown-item" to="/login" >
-                      Inicia Sesión
-                    </Link>
-                  </li>
-                  <li>
-                    <Link className="dropdown-item" to="/Registrarse" >
-                      Registrate
-                    </Link>
-                  </li>
-                </ul>
+              <li className="nav-item">
+                <Link className="nav-link active" to="/login" >
+                  <button
+                    className="btn btn-info text-white"
+                    type="button"
+                  >
+                    <IoPerson />
+                  </button>
+                </Link>
               </li>
             </ul>
           </div>
         </div>
       </nav>
-      <Outlet /> 
+      <Outlet />
 
       {/* footer */}
       <footer className="bg-primary text-white text-center py-3 mt-auto">

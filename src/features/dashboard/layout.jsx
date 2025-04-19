@@ -1,17 +1,63 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link, Outlet, useNavigate } from 'react-router-dom';
+import { getRole } from './layout.service';
 
 export const Layout = () => {
   const navegation = useNavigate();
   const [isSidebarOpen, setSidebarOpen] = useState(false);
+  const [userRol, setUserRol] = useState(null);
 
   const logout = () => {
     localStorage.removeItem("Token");
+    localStorage.removeItem("rolId");
     navegation('/');
   };
 
   const toggleSidebar = () => {
     setSidebarOpen(!isSidebarOpen);
+  };
+
+  useEffect(() => {
+    const Data = async () => {
+      const rolId = localStorage.getItem('rolId');
+      const res = await getRole(parseInt(rolId))
+      setUserRol(res.data)
+    }
+    Data()
+  }, [])
+  console.log(userRol);
+  
+  // Función para renderizar los enlaces según el rol
+  const renderNavLinks = () => {
+    if (!userRol) return null;
+
+    const commonLinks = [
+      <li key="productos" className="nav-item">
+        <Link to="/dashboard/Productos" className="nav-link text-white">Productos</Link>
+      </li>,
+      <li key="categorias" className="nav-item">
+        <Link to="/dashboard/Categorias" className="nav-link text-white">Categorías</Link>
+      </li>
+    ];
+
+    if (userRol.name === 'Administrador') {
+      return [
+        <li key="usuarios" className="nav-item">
+          <Link to="/dashboard/Usuarios" className="nav-link text-white">Usuarios</Link>
+        </li>,
+        <li key="roles" className="nav-item">
+          <Link to="/dashboard/Roles" className="nav-link text-white">Roles</Link>
+        </li>,
+        <li key="compañias" className="nav-item">
+          <Link to="/dashboard/Compañias" className="nav-link text-white">Compañías</Link>
+        </li>,
+        ...commonLinks
+      ];
+    } else if (userRol.name === 'proveedor') {
+      return commonLinks;
+    }
+
+    return null;
   };
 
   return (
@@ -29,7 +75,6 @@ export const Layout = () => {
         </button>
       </div>
 
-
       <div className="d-flex flex-grow-1 flex-column flex-md-row">
         {/* Sidebar */}
         <nav
@@ -38,21 +83,7 @@ export const Layout = () => {
           style={{ width: "220px" }}
         >
           <ul className="nav flex-column">
-            <li className="nav-item">
-              <Link to="/dashboard/Usuarios" className="nav-link text-white">Usuarios</Link>
-            </li>
-            <li className="nav-item">
-              <Link to="/dashboard/Roles" className="nav-link text-white">Roles</Link>
-            </li>
-            <li className="nav-item">
-              <Link to="/dashboard/Compañias" className="nav-link text-white">Compañías</Link>
-            </li>
-            <li className="nav-item">
-              <Link to="/dashboard/Productos" className="nav-link text-white">Productos</Link>
-            </li>
-            <li className="nav-item">
-              <Link to="/dashboard/Categorias" className="nav-link text-white">Categorías</Link>
-            </li>
+            {renderNavLinks()}
           </ul>
         </nav>
 

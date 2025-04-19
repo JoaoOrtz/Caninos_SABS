@@ -7,7 +7,6 @@ import { ProductsLanding } from "../features/landing/Products/products";
 import { ServicesLanding } from "../features/landing/services/services";
 import { CategoriesLanding } from "../features/landing/categories/categories";
 import { Login } from "../features/auth/login";
-import { Record } from "../features/auth/record";
 import { Layout } from "../features/dashboard/layout";
 import { UserDashboard } from "../features/dashboard/Users/users";
 import { RoleDashboard } from "../features/dashboard/roles/roles";
@@ -42,7 +41,6 @@ export const RouteComponent = () => {
 
         {/* Ingreso */}
         <Route path="/login" element={<Login />} />
-        <Route path="/Registrarse" element={<Record />} />
 
         {/* Rutas de la dashboard */}
         <Route

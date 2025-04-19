@@ -12,12 +12,46 @@ export const RoleDashboard = () => {
   const navigate = useNavigate();
 
   const [dataRols, setDataRols] = useState([]);
+  const [rolError, setRolError] = useState({
+    show: false,
+    title: "",
+    message: "",
+    type: "warning"
+  });
+
+  // Verificar categorías
+  const checkRol = (rol) => {
+    if (!rol || rol.length === 0) {
+      setRolError({
+        show: true,
+        title: "Aviso",
+        message: "No se encontró ningun rol.",
+        type: "warning"
+      });
+      return true;
+    }
+    setRolError({ ...rolError, show: false });
+    return false;
+  };
+
 
   useEffect(() => {
     const data = async () => {
-      const response = await getRols();
-      setDataRols(response.data);
-      console.log(response);
+      try {
+        const response = await getRols();
+        const rol = response?.data || []
+        setDataRols(response.data);
+        checkRol(rol)
+
+      } catch (error) {
+        setRolError({
+          show: true,
+          title: "Error",
+          message: "Error al cargar los roles",
+          type: "danger"
+        });
+        console.error("Error fetching roles:", err);
+      }
     };
     data();
   }, [dataRols]);
@@ -34,7 +68,7 @@ export const RoleDashboard = () => {
     <>
       <div className="container-fluid">
 
-      <div className="row g-3 p-2 align-items-center">
+        <div className="row g-3 p-2 align-items-center">
           <div className="col">
             <h2>Lista De Rol</h2>
           </div>
@@ -42,7 +76,12 @@ export const RoleDashboard = () => {
             <button type="button" className="btn btn-primary" onClick={viewForm}>Nuevo Rol</button>
           </div>
         </div>
-
+        {/* Mensaje de error para productos */}
+        {rolError.show && (
+          <div className={`alert alert-${rolError.type} alert-dismissible fade show mb-2`} role="alert">
+            <strong>{rolError.title}</strong> {rolError.message}
+          </div>
+        )}
         <div className="table-responsive">
           <table
             className="table table-hover align-middle shadow-sm"
@@ -57,7 +96,7 @@ export const RoleDashboard = () => {
                 <th>#</th>
                 <th>Nombre</th>
                 <th>Descripción</th>
-                <th>Acciones</th> 
+                <th>Acciones</th>
               </tr>
             </thead>
             <tbody>
