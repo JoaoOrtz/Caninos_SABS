@@ -1,7 +1,8 @@
-import React, { useEffect, useState } from 'react'
+import React, { use, useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom';
 import { getCategories, postProduct } from '../../service/product.service';
 import { AlertSuccess } from '../../../../../shared/alert/success';
+import axios from 'axios';
 
 export const FormProduct = () => {
     const navegate = useNavigate()
@@ -17,6 +18,20 @@ export const FormProduct = () => {
     })
 
     const [categories, setCategories] = useState([])
+
+    const [alertError, setAlertError] = useState({
+        show: false,
+        title: "",
+        message: "",
+        type: "warning"
+    });
+
+    const [alertError1, setAlertError1] = useState({
+        show: false,
+        title: "",
+        message: "",
+        type: "warning"
+    });
 
     useEffect(() => {
         const data = async () => {
@@ -37,6 +52,13 @@ export const FormProduct = () => {
 
     const HandleSubmint = async (e) => {
         e.preventDefault()
+        if (!validatorName()) {
+            return;
+        }
+
+        if (!validateForm()) {
+            return;
+        }
         const response = await postProduct(formProduct)
         console.log(response);
         if (response.data.status === "success") {
@@ -44,6 +66,95 @@ export const FormProduct = () => {
             AlertSuccess('Producto creado', 'El producto se ha creado correctamente')
         }
 
+    }
+
+    //Validacion de datos vacios
+    const validateForm = () => {
+        // Verificar campos obligatorios
+        if (!formProduct.name.trim()) {
+            setAlertError({
+                show: true,
+                title: "Error",
+                message: "El nombre del producto es obligatorio",
+                type: "danger"
+            });
+            return false;
+        }
+
+        if (!formProduct.description.trim()) {
+            setAlertError({
+                show: true,
+                title: "Error",
+                message: "La descripción del producto es obligatorio",
+                type: "danger"
+            });
+            return false;
+        }
+
+        if (!formProduct.price || parseInt(formProduct.price) <= 0) {
+            setAlertError({
+                show: true,
+                title: "Error",
+                message: "El precio del producto es obligatorio",
+                type: "danger"
+            });
+            return false;
+        }
+
+        if (!formProduct.stock || parseInt(formProduct.stock) < 0) {
+            setAlertError({
+                show: true,
+                title: "Error",
+                message: "La cantidad del producto es obligatorio",
+                type: "danger"
+            });
+            return false;
+        }
+
+        if (!formProduct.categoryId || formProduct.categoryId === "0") {
+            setAlertError({
+                show: true,
+                title: "Error",
+                message: "Debe seleccionar una categoría",
+                type: "danger"
+            });
+            return false;
+        }
+
+        return true; // Todos los campos son válidos
+    };
+
+    const checkProductName = async (productName) => {
+        try {
+            const response = await axios.get('http://localhost:3030/products');
+            const products = response.data.products || [];
+            return products.some(product => 
+                product.name.trim().toLowerCase() === productName.trim().toLowerCase()
+            );
+        } catch (error) {
+            console.error("Error al verificar el nombre del producto:", error);
+            return false; // Asumimos que no existe para no bloquear la UI
+        }
+    };
+    
+    const validatorName = async () => {
+        const name = formProduct.name.trim();
+        if (!name) return true; // Ya se valida en validateForm
+        
+        const nameExists = await checkProductName(name);
+        if (nameExists) {
+            setAlertError1({
+                show: true,
+                title: "Error",
+                message: "Ya existe un producto con este nombre",
+                type: "danger"
+            });
+            return false;
+        }
+        
+        // Limpia el error si todo está bien
+        setAlertError1(prev => ({ ...prev, show: false }));
+        return true;
     }
 
     const back = () => {
@@ -75,11 +186,24 @@ export const FormProduct = () => {
             </button>
             <div className="container">
                 <h2 className="mb-4 mt-3">Formulario de Producto</h2>
+                {/* Mensaje de error para productos */}
+                {alertError.show && (
+                    <div className={`alert alert-${alertError.type} alert-dismissible fade show mb-2`} role="alert">
+                        <strong>{alertError.title}</strong> {alertError.message}
+                    </div>
+                )}
+
+                {alertError1.show && (
+                    <div className={`alert alert-${alertError1.type} alert-dismissible fade show mb-2`} role="alert">
+                        <strong>{alertError1.title}</strong> {alertError1.message}
+                    </div>
+                )}
                 <form onSubmit={HandleSubmint}>
                     <div className="mb-3">
                         <label htmlFor="nombre" className="form-label">Nombre</label>
                         <input
                             name='name'
+                            onBlur={validatorName}
                             value={formProduct.name}
                             onChange={ChangeData}
                             type="text"
