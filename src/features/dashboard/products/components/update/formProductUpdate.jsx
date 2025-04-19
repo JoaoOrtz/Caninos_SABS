@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { getCategories, getProduct, putProduct } from '../../service/product.service'
+import { getCategories, getProduct, getProducts, putProduct } from '../../service/product.service'
 import { useNavigate, useParams } from 'react-router-dom'
 import { AlertSuccess } from '../../../../../shared/alert/success'
 
@@ -16,6 +16,13 @@ export const FormProductUpdate = () => {
         imageUrl: "",
         categoryId: ""
     })
+
+    const [alertError, setAlertError] = useState({
+        show: false,
+        title: "",
+        message: "",
+        type: "warning"
+    });
 
     const [categories, setCategories] = useState([])
 
@@ -43,7 +50,6 @@ export const FormProductUpdate = () => {
     //Funcion para recolección los datos
     const ChangeData = (e) => {
         const { name, value } = e.target
-        console.log(name, value);
         setFormProduct({
             ...formProduct,
             [name]: value
@@ -52,11 +58,48 @@ export const FormProductUpdate = () => {
 
     const HandleSubmint = async (e) => {
         e.preventDefault()
+        if (!validatorName()) {
+            return;
+        }
+
         const response = await putProduct(id, formProduct)
         if (response.data.status === "success") {
             navegate('/dashboard/Productos')
             AlertSuccess('Producto actualizado', 'El producto se ha actualizado correctamente')
         }
+    }
+
+    const checkProductName = async (productName) => {
+        try {
+            const response = await getProducts();
+            const products = response.data.products || [];
+            return products.some(product =>
+                product.name.trim().toLowerCase() === productName.trim().toLowerCase()
+            );
+        } catch (error) {
+            console.error("Error al verificar el nombre del producto:", error);
+            return false; // Asumimos que no existe para no bloquear la UI
+        }
+    };
+
+    const validatorName = async () => {
+        const name = formProduct.name.trim();
+        if (!name) return true; // Ya se valida en validateForm
+
+        const nameExists = await checkProductName(name);
+        if (nameExists) {
+            setAlertError({
+                show: true,
+                title: "Error",
+                message: "Ya existe un producto con este nombre",
+                type: "danger"
+            });
+            return false;
+        }
+
+        // Limpia el error si todo está bien
+        setAlertError(prev => ({ ...prev, show: false }));
+        return true;
     }
 
     const back = () => {
@@ -89,11 +132,17 @@ export const FormProductUpdate = () => {
 
             <div className="container">
                 <h2 className="mb-4 mt-3">Formulario de actualización de Producto</h2>
+                {alertError.show && (
+                    <div className={`alert alert-${alertError.type} alert-dismissible fade show mb-2`} role="alert">
+                        <strong>{alertError.title}</strong> {alertError.message}
+                    </div>
+                )}
                 <form onSubmit={HandleSubmint}>
                     <div className="mb-3">
                         <label htmlFor="nombre" className="form-label">Nombre</label>
                         <input
                             name='name'
+                            onBlur={validatorName}
                             value={formProduct.name}
                             onChange={ChangeData}
                             type="text"
@@ -122,6 +171,12 @@ export const FormProductUpdate = () => {
                                 <span className="input-group-text">$</span>
                                 <input
                                     name='price'
+                                    onKeyDown={(e) => {
+                                        // Evita que se ingresen puntos (decimales), comas o signos negativos
+                                        if (['.', ',', '-', '+', 'e', 'E'].includes(e.key)) {
+                                            e.preventDefault();
+                                        }
+                                    }}
                                     value={formProduct.price}
                                     onChange={ChangeData}
                                     type="number"
@@ -135,6 +190,12 @@ export const FormProductUpdate = () => {
                             <label htmlFor="cantidad" className="form-label">Cantidad</label>
                             <input
                                 name='stock'
+                                onKeyDown={(e) => {
+                                    // Evita que se ingresen puntos (decimales), comas o signos negativos
+                                    if (['.', ',', '-', '+', 'e', 'E'].includes(e.key)) {
+                                        e.preventDefault();
+                                    }
+                                }}
                                 value={formProduct.stock}
                                 onChange={ChangeData}
                                 type="number"

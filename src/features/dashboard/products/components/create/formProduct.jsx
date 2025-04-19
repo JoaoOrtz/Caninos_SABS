@@ -1,6 +1,6 @@
 import React, { use, useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom';
-import { getCategories, postProduct } from '../../service/product.service';
+import { getCategories, getProducts, postProduct } from '../../service/product.service';
 import { AlertSuccess } from '../../../../../shared/alert/success';
 import axios from 'axios';
 
@@ -126,7 +126,7 @@ export const FormProduct = () => {
 
     const checkProductName = async (productName) => {
         try {
-            const response = await axios.get('http://localhost:3030/products');
+            const response = await getProducts();
             const products = response.data.products || [];
             return products.some(product => 
                 product.name.trim().toLowerCase() === productName.trim().toLowerCase()
@@ -234,6 +234,12 @@ export const FormProduct = () => {
                                     name='price'
                                     value={formProduct.price}
                                     onChange={ChangeData}
+                                    onKeyDown={(e) => {
+                                        // Evita que se ingresen puntos (decimales), comas o signos negativos
+                                        if (['.', ',', '-', '+', 'e', 'E'].includes(e.key)) {
+                                            e.preventDefault();
+                                        }
+                                    }}
                                     type="number"
                                     className="form-control"
                                     placeholder="0.00"
@@ -247,6 +253,12 @@ export const FormProduct = () => {
                                 name='stock'
                                 value={formProduct.stock}
                                 onChange={ChangeData}
+                                onKeyDown={(e) => {
+                                    // Evita que se ingresen puntos (decimales), comas o signos negativos
+                                    if (['.', ',', '-', '+', 'e', 'E'].includes(e.key)) {
+                                        e.preventDefault();
+                                    }
+                                }}
                                 type="number"
                                 className="form-control"
                                 placeholder="0"
