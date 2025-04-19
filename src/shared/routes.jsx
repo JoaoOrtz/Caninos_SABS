@@ -4,7 +4,6 @@ import { Landing } from "../features/landing/landing";
 import { Home } from "../features/landing/home/home";
 import { About } from "../features/landing/About/about";
 import { ProductsLanding } from "../features/landing/Products/products";
-import { ServicesLanding } from "../features/landing/services/services";
 import { CategoriesLanding } from "../features/landing/categories/categories";
 import { Login } from "../features/auth/login";
 import { Layout } from "../features/dashboard/layout";
@@ -35,7 +34,6 @@ export const RouteComponent = () => {
           <Route path="inicio" element={<Home />} />
           <Route path="Sobre-Nosotros" element={<About />} />
           <Route path="productos" element={<ProductsLanding />} />
-          <Route path="Servicios" element={<ServicesLanding />} />
           <Route path="Categorias" element={<CategoriesLanding />} />
         </Route>
 
@@ -51,6 +49,9 @@ export const RouteComponent = () => {
             </PrivateRoute>
           }
         >
+          <Route path="Usuarios" element={<UserDashboard />} /> 
+          <Route path="nuevo-user" element={<CreateUser/>} />
+          <Route path="editar-user/:id" element={<FormUserUpdate/>} />
           <Route path="Usuarios" element={<UserDashboard />} /> 
           <Route path="nuevo-user" element={<CreateUser/>} />
           <Route path="editar-user/:id" element={<FormUserUpdate/>} />

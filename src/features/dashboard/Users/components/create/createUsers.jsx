@@ -1,32 +1,50 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { AlertSuccess } from "../../../../../shared/alert/success";
-import { postUsers } from "../../services/users.service";
+import { getUsers, postUsers } from "../../services/users.service";
 import { getRols } from "../../../roles/service/roles.service";
+import { getCompanies } from "../../../companies/services/companies.service";
 
 export const CreateUser = () => {
-  const navigate = useNavigate();  // Corrige el nombre a "navigate" en lugar de "navegate"
+  const navigate = useNavigate(); // Corrige el nombre a "navigate" en lugar de "navegate"
 
   // Objeto de datos
   const [formUsers, setFormUsers] = useState({
     fullName: "",
     email: "",
-    password: "",  // Campo de contraseña
+    password: "", // Campo de contraseña
     roleId: 0,
-    companyId: ""
+    companyId: "",
+  });
+
+  const [alertError1, setAlertError1] = useState({
+    show: false,
+    title: "",
+    message: "",
+    type: "warning",
   });
 
   const [roles, setRoles] = useState([]);
+  const [companies, setCompanies] = useState([]);
 
   // Cargar los roles cuando el componente se monte
   useEffect(() => {
     const loadRoles = async () => {
-        const response = await getRols();
-        setRoles(response.data);
+      const response = await getRols();
+      setRoles(response.data);
     };
 
     loadRoles();
-  }, []);  // El array vacío asegura que solo se ejecute una vez al montar
+  }, []);
+  // El array vacío asegura que solo se ejecute una vez al montar
+  useEffect(() => {
+    const loadCompanies = async () => {
+      const response = await getCompanies();
+      setCompanies(response.data);
+    };
+
+    loadCompanies();
+  }, []);
 
   // Función para manejar el cambio de datos en el formulario
   const ChangeData = (e) => {
@@ -40,12 +58,15 @@ export const CreateUser = () => {
   // Función para manejar el envío del formulario
   const HandleSubmit = async (e) => {
     e.preventDefault();
+    if (!validateForm()) {
+      return;
+    }
     try {
       const response = await postUsers(formUsers);
       console.log(response);
-      if (response.data.status === "success") {
+      if (response.status === 201) {
         AlertSuccess("Usuario creado", "El usuario se ha creado correctamente");
-        navigate("/dashboard/Usuarios");  // Redirige a la página de usuarios
+        navigate("/dashboard/Usuarios"); // Redirige a la página de usuarios
       }
     } catch (error) {
       console.error("Error al crear el usuario", error);
@@ -55,6 +76,91 @@ export const CreateUser = () => {
   // Función para volver atrás
   const back = () => {
     navigate("/dashboard/Usuarios");
+  };
+
+  //Validacion de datos vacios
+  const validateForm = () => {
+    // Verificar campos obligatorios
+    if (!formUsers.fullName.trim()) {
+      setAlertError1({
+        show: true,
+        title: "Error",
+        message: "El nombre del Usuario es obligatorio",
+        type: "danger",
+      });
+      return false;
+    }
+
+    if (!formUsers.email.trim()) {
+      setAlertError1({
+        show: true,
+        title: "Error",
+        message: "El Correo es obligatorio",
+        type: "danger",
+      });
+      return false;
+    }
+
+    if (!formUsers.password.trim()) {
+      setAlertError1({
+        show: true,
+        title: "Error",
+        message: "La contraseña obligatoria",
+        type: "danger",
+      });
+      return false;
+    }
+    if (!formUsers.companyId || formUsers.companyId === "0") {
+      setAlertError1({
+        show: true,
+        title: "Error",
+        message: "Debe seleccionar una Compañia",
+        type: "danger",
+      });
+      return false;
+    }
+    if (!formUsers.roleId || formUsers.roleId === "0") {
+      setAlertError1({
+        show: true,
+        title: "Error",
+        message: "Debe seleccionar un rol",
+        type: "danger",
+      });
+      return false;
+    }
+
+    return true; // Todos los campos son válidos
+  };
+
+      const checkUserName = async (userName) => {
+          try {
+              const response = await getUsers();
+              const products = response.data|| [];
+              return users.some(users => 
+                  users.name.trim().toLowerCase() === userName.trim().toLowerCase()
+              );
+          } catch (error) {
+              console.error("Error al verificar el nombre del producto:", error);
+              return false; // Asumimos que no existe para no bloquear la UI
+          }
+      };
+  const validatorName = async () => {
+    const name = formUsers.fullName.trim();
+    if (!name) return true; // Ya se valida en validateForm
+    const nameExists = await check(name);
+    if (nameExists) {
+      setAlertError1({
+        show: true,
+        title: "Error",
+        message: "Ya existe un producto con este nombre",
+        type: "danger",
+      });
+      return false;
+    }
+
+    // Limpia el error si todo está bien
+    setAlertError1((prev) => ({ ...prev, show: false }));
+    return true;
   };
 
   return (
@@ -82,14 +188,24 @@ export const CreateUser = () => {
       </button>
       <div className="container">
         <h2 className="mb-4 mt-3">Formulario de Usuarios</h2>
+
+        {alertError1.show && (
+          <div
+            className={`alert alert-${alertError1.type} alert-dismissible fade show mb-2`}
+            role="alert"
+          >
+            <strong>{alertError1.title}</strong> {alertError1.message}
+          </div>
+        )}
         <form onSubmit={HandleSubmit}>
           <div className="mb-3">
             <label htmlFor="nombre" className="form-label">
               Nombre
             </label>
             <input
-              name="fullName"  // Corrige el "name" para que coincida con el estado
+              name="fullName" // Corrige el "name" para que coincida con el estado
               value={formUsers.fullName}
+              onBlur={validatorName}
               onChange={ChangeData}
               type="text"
               className="form-control"
@@ -116,10 +232,10 @@ export const CreateUser = () => {
               Contraseña
             </label>
             <input
-              name="password"  // Aquí corriges el campo para que sea "password"
+              name="password" // Aquí corriges el campo para que sea "password"
               value={formUsers.password}
               onChange={ChangeData}
-              type="password"  // Usa tipo "password" para ocultar la contraseña
+              type="password" // Usa tipo "password" para ocultar la contraseña
               className="form-control"
               placeholder="Ingrese la contraseña del usuario"
             />
@@ -130,7 +246,7 @@ export const CreateUser = () => {
               Rol
             </label>
             <select
-              name="roleId"  // Corrige el nombre a "roleId"
+              name="roleId" // Corrige el nombre a "roleId"
               value={formUsers.roleId}
               onChange={ChangeData}
               className="form-select"
@@ -141,6 +257,26 @@ export const CreateUser = () => {
               {roles.map((role) => (
                 <option key={role.id} value={role.id}>
                   {role.name}
+                </option>
+              ))}
+            </select>
+          </div>
+          <div className="mb-3">
+            <label htmlFor="rol" className="form-label">
+              Compañia
+            </label>
+            <select
+              name="companyId" // Corrige el nombre a "roleId"
+              value={formUsers.companyId}
+              onChange={ChangeData}
+              className="form-select"
+              id="company"
+              required
+            >
+              <option value={0}>Seleccione una compañia</option>
+              {companies.map((company) => (
+                <option key={company.id} value={company.id}>
+                  {company.name}
                 </option>
               ))}
             </select>

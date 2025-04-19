@@ -10,6 +10,8 @@ export const Login = () => {
     email: "",
     password: "",
   });
+  
+
   // Función para recolección de datos
   const changeData = (e) => {
     const { name, value } = e.target;
@@ -18,17 +20,22 @@ export const Login = () => {
       [name]: value,
     });
   };
+
   //
   const handleSubmit = async (e) => {
     e.preventDefault();
- 
     await PostLogin(formData);
     const logiados = await getLogin()
-    const Token = localStorage.getItem('Token');
-    const user = logiados.find(e => e.email === formData.email)
-    const rolUser = user.roleId
-    localStorage.setItem('rolId', JSON.stringify(rolUser));
     
+    
+    const Token = localStorage.getItem('Token');
+    const user = logiados.find(e => e.email === formData.email)  
+    console.log(user);
+     
+    const rolUser = user.roleId
+    console.log(rolUser);
+    
+    localStorage.setItem('rolId', JSON.stringify(rolUser));
     if (Token) {
       navigate("/dashboard", { replace: true });
     }

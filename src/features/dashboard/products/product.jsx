@@ -171,6 +171,7 @@ export const ProductDashboard = () => {
               className="btn btn-primary"
               data-bs-container="body"
               data-bs-toggle="popover"
+              data-bs-trigger="focus"
               data-bs-placement="bottom"
               data-bs-content="No puedes agregar productos sin categorías. Primero crea al menos una categoría."
               title="Acción no disponible"

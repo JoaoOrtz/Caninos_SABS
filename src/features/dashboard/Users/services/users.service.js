@@ -12,7 +12,6 @@ export const getUsers = async () => {
     };
   }
 };
-
 export const postUsers = async (data) => {
   try {
     console.log(data);
@@ -26,7 +25,6 @@ export const postUsers = async (data) => {
     };
   }
 };
-
 export const deleteUsers = async (id) => {
   try {
     const response = await axios.delete("http://localhost:3030/users/" + id);
@@ -38,7 +36,6 @@ export const deleteUsers = async (id) => {
     };
   }
 };
-
 export const putUsers = async (id, data) => {
   try {
     const response = await axios.put(`http://localhost:3030/users/${id}`, data);
@@ -50,7 +47,6 @@ export const putUsers = async (id, data) => {
     };
   }
 };
-
 export const getOneUser = async (id) => {
   try {
     const response = await axios.get(`http://localhost:3030/users/${id}`);
@@ -63,5 +59,3 @@ export const getOneUser = async (id) => {
     };
   }
 };
-
-

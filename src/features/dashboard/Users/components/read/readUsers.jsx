@@ -67,7 +67,7 @@ export const SeeUser = ({ id }) => {
                       <td>{dataUser.fullName}</td>
                       <td>{dataUser.email}</td>
                       <td>${dataUser.password}</td>
-                      <td>{dataUser.role.name}</td>
+                      <td>{dataUser.role?.name|| "Sin Rol"}</td>
                       <td>{dataUser.company.name}</td>
                     </tr>
                   </tbody>

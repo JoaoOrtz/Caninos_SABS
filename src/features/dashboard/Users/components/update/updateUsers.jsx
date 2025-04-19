@@ -3,6 +3,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import { AlertSuccess } from "../../../../../shared/alert/success";
 import { getOneUser, putUsers } from "../../services/users.service";
 import { getRols } from "../../../roles/service/roles.service";
+import { getCompanies } from "../../../companies/services/companies.service";
 
 export const FormUserUpdate = () => {
   const navegate = useNavigate();
@@ -15,12 +16,29 @@ export const FormUserUpdate = () => {
     email: "",
     password: "",
     roleId: 0,
-    companyId: "",
+    companyId:0,
   });
+
+  // Cargar los roles cuando el componente se monte
+  useEffect(() => {
+    const loadRoles = async () => {
+      const response = await getRols();
+      setRoles(response.data);
+    };
+
+    loadRoles();
+  }, []);
+  // El array vacío asegura que solo se ejecute una vez al montar
+  useEffect(() => {
+    const loadCompanies = async () => {
+      const response = await getCompanies();
+      setCompanies(response.data);
+    };
+
+    loadCompanies();
+  }, []);
   useEffect(() => {
     const data = async () => {
-        const response = await getRols()
-        setRoles(response.data);
       if (id) {
         const response = await getOneUser(id);
         if (response.data) {
@@ -39,7 +57,6 @@ export const FormUserUpdate = () => {
   //Funcion para recolección los datos
   const ChangeData = (e) => {
     const { name, value } = e.target;
-    console.log(name, value);
     setFormUser({
       ...formUser,
       [name]: value,
@@ -49,7 +66,7 @@ export const FormUserUpdate = () => {
   const HandleSubmint = async (e) => {
     e.preventDefault();
     const response = await putUsers(id, formUser);
-    if (response.data.status === "success") {
+    if (response.status === 200) {
       navegate("/dashboard/Usuarios");
       AlertSuccess(
         "Usuario actualizado",
@@ -94,7 +111,7 @@ export const FormUserUpdate = () => {
               Nombre
             </label>
             <input
-              name="name"
+              name="fullName"
               value={formUser.fullName}
               onChange={ChangeData}
               type="text"
@@ -137,27 +154,26 @@ export const FormUserUpdate = () => {
               ))}
             </select>
           </div>
-          {/* <div className="mb-3">
-            <label htmlFor="categoria" className="form-label">
-              Categoría
+          <div className="mb-3">
+            <label htmlFor="rol" className="form-label">
+              Compañia
             </label>
             <select
-              name="categoryId"
-              value={formProduct.categoryId}
+              name="companyId" // Corrige el nombre a "roleId"
+              value={formUser.companyId}
               onChange={ChangeData}
               className="form-select"
-              id="categoria"
+              id="company"
+              required
             >
-              <option key={0} value={0}>
-                Seleccione una categoría
-              </option>
-              {categories.map((e, i) => (
-                <option key={i} value={e.id}>
-                  {e.name}
+              <option value={0}>Seleccione una compañia</option>
+              {companies.map((company) => (
+                <option key={company.id} value={company.id}>
+                  {company.name}
                 </option>
               ))}
             </select>
-          </div> */}
+          </div>
 
           <button type="submit" className="btn btn-primary">
             Guardar
