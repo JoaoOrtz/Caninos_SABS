@@ -1,6 +1,6 @@
-import { deleteRol } from '../../service/roles.service';
+import { deleteCategorie } from '../../service/serviceCategorie';
 
-export const AlertDeleteRol = (id, title, message, refreshData) => { 
+export const AlertDeleteCategorie = (id, title, message, refreshData) => { 
   Swal.fire({
     title: title,
     text: message,
@@ -13,11 +13,11 @@ export const AlertDeleteRol = (id, title, message, refreshData) => {
   }).then(async (result) => {
     if (result.isConfirmed) {
       try {
-        const response = await deleteRol(id);
+        const response = await deleteCategorie(id);
         if (response.status === 200) {
           Swal.fire({
             title: "¡Eliminado!",
-            text: "El rol ha sido eliminado.",
+            text: "La categoría ha sido eliminado.",
             icon: "success",
             showConfirmButton: false,
             timer: 1500
@@ -28,7 +28,7 @@ export const AlertDeleteRol = (id, title, message, refreshData) => {
       } catch (error) {
         Swal.fire({
           title: "Error",
-          text: error.message || "No se pudo eliminar el rol",
+          text: error.message || "No se pudo eliminar la categoría",
           icon: "error"
         });
       }
