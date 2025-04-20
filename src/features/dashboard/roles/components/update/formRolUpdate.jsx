@@ -105,7 +105,6 @@ export const FormRolUpdate = () => {
     try {
       const response = await getRols();
       const rols = response.data || [];
-      console.log(rols);
       
       return rols.some(
         (rol) => 

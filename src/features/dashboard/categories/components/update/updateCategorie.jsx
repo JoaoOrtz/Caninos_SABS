@@ -105,8 +105,7 @@ export const UpdateCategorie = () => {
     try {
       const response = await getCategorie();
       const categorie = response.data || [];
-      console.log(categorie);
-
+      
       return categorie.some(
         (categorie) =>
           categorie.name.trim().toLowerCase() ===

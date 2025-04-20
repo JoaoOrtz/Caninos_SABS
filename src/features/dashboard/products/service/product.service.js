@@ -27,7 +27,6 @@
 
     export const postProduct = async (data) => {
         try {
-            console.log(data)
             const response = await axios.post('http://localhost:3030/products', data)
             return response
         } catch (error) {

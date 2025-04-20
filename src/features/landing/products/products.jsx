@@ -9,9 +9,7 @@
       const fetchProducts = async () => {
         try {
           const response = await getProducts();
-          setProducts(response.data.products);
-          console.log(response.data.products);
-          
+          setProducts(response.data.products);          
         } catch (err) {
           console.error("Error fetching products:", err);
         }

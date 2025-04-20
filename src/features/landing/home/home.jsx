@@ -14,7 +14,6 @@ export const Home = () => {
     const data = async () => {
       try {
         const response = await getInfo();
-        console.log(response);
         setDataLandig(response.data);
       } catch (error) {
         console.error("Error al traer la información:", error);

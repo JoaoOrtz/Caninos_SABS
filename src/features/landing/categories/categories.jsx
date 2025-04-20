@@ -9,7 +9,6 @@ export const CategoriesLanding = () => {
       try {
         const response = await getCategories()
         setCategories(response.data.categories)
-        console.log(response);
       } catch (error) {
         console.error("Error fetching categories:", err);
       }
