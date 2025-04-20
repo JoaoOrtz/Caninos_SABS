@@ -60,17 +60,18 @@ export const Layout = () => {
         const rolId = localStorage.getItem('rolId');
         if (!rolId) {
           setInvalidRole(true);
-          
           return;
         }
         
         const response = await getRole(parseInt(rolId));
+        
         setUserRol(response.data);
         const res2 = await getUsers()
         const admin = res2.data.find(e => e.role.name === "Administrador")
         setUser(admin)
         
         const normalizedRole = normalizeRoleName(response.data.name);
+        
         if (!['administrador', 'proveedor'].includes(normalizedRole)) {
           setInvalidRole(true);
         }
@@ -110,7 +111,7 @@ export const Layout = () => {
       ],
       proveedor: [
         <li key="compañias" className="nav-item">
-          <Link to="/dashboard/Compañias" className="nav-link text-white">Compañías</Link>
+          <Link to="/dashboard/Categorias" className="nav-link text-white">Categorías</Link>
         </li>,
         <li key="productos" className="nav-item">
           <Link to="/dashboard/Productos" className="nav-link text-white">Productos</Link>

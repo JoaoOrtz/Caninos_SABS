@@ -30,10 +30,10 @@ export const Login = () => {
     const logiados = await getLogin()
     const Token = localStorage.getItem('Token');
     const user = logiados.find(e => e.email === formData.email)  
+     console.log("informacion del usuario",user);
      
     const rolUser = user.roleId
 
-    
     localStorage.setItem('rolId', JSON.stringify(rolUser));
     if (Token) {
       navigate("/dashboard", { replace: true });
