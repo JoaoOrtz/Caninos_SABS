@@ -11,20 +11,6 @@ Currently, two official plugins are available:
 
 If you are developing a production application, we recommend using TypeScript and enable type-aware lint rules. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
 
-# Packages and dependencies
-
-# React router dom
-npm i react-router-dom
-
-# React Icon
-npm install react-icons --save
-
-# Axios
-npm i axios
-
-Aquí tienes un ejemplo de `README.md` en formato Markdown para el repositorio [Caninos_SABS](https://github.com/JoaoOrtz/Caninos_SABS.git), basado en el contenido del PDF que compartiste:
-
----
 
 # 🐾 Caninos SABS
 
@@ -46,7 +32,7 @@ Esta aplicación web full stack permite:
 - [Vite](https://vitejs.dev/)
 - [React Router DOM](https://reactrouter.com/)
 - [Axios](https://axios-http.com/)
-- [TailwindCSS](https://tailwindcss.com/) o Bootstrap (según la implementación)
+- [Bootstrap](https://getbootstrap.com/)
 
 ### Backend
 - Node.js
@@ -56,14 +42,14 @@ Esta aplicación web full stack permite:
 - JWT (autenticación)
 - CORS, Dotenv
 
-> 🔗 API disponible en: [https://github.com/sena-yeison/taller_reactjs](https://github.com/sena-yeison/taller_reactjs)
+> 🔗 API disponible en: [https://github.com/Danier00/Api.git](https://github.com/Danier00/Api.git)
 
 ## 🖼️ Funcionalidades
 
 ### 🌐 Landing Page
 - Inicio: Presentación general de la empresa.
 - Quiénes somos: Historia y misión.
-- Productos, servicios y categorías: Visualizados desde la API.
+- Productos, empresas y categorías: Visualizados desde la API.
 
 ### 🔐 Panel Administrativo
 - Login con autenticación JWT.
@@ -95,10 +81,10 @@ npm run dev
 
 ### 🔙 Backend
 
-1. Clonar el backend desde:
+1. Clonar el backend (es un submodulo) desde:
 
 ```bash
-git clone https://github.com/sena-yeison/taller_reactjs.git
+git clone https://github.com/Danier00/Api.git
 ```
 
 2. Configurar la base de datos y variables `.env`.
@@ -107,7 +93,7 @@ git clone https://github.com/sena-yeison/taller_reactjs.git
 
 ```bash
 npm install
-npm run dev
+npm start
 ```
 
 > Asegúrate de tener la base de datos configurada correctamente y que el backend esté corriendo para poder consumir la API desde el frontend.
@@ -118,11 +104,6 @@ Consulta la documentación completa del proyecto y del consumo de API aquí:
 
 - [Notion del proyecto](https://capricious-breath-652.notion.site/PROYECTO-FINAL-REACT-JS-1b5b9b7c87878007a837ee74d229e045)
 
-## 🎥 Canal de YouTube
-
-Accede al mini curso sobre consumo de API con React en el canal:
-
-- [Canal de YouTube (enlace pendiente)](https://www.youtube.com/channel/xxxxx)
 
 ## 📅 Fecha de Entrega
 
@@ -135,5 +116,3 @@ Accede al mini curso sobre consumo de API con React en el canal:
 - Este archivo `README.md` con instrucciones claras de uso.
 
 ---
-
-¿Te gustaría que incluya capturas de pantalla o instrucciones más detalladas para la base de datos o el .env?
