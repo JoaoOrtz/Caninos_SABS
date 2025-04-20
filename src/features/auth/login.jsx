@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { Landing } from "../landing/landing";
 import { getLogin, PostLogin } from "./services/auth.services"
 import { AlertError } from "../../shared/alert/error";
 

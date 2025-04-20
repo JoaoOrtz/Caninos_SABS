@@ -22,10 +22,11 @@
 
     return (
       <div className="container pt-5 mt-5">
+        <h1 className="text-center mb-4 text-info">Nuestros Productos</h1>
         <div className="row">
           {products.map((product) => (
             <div key={product.id} className="col-md-4 col-sm-6 mb-4">
-              <div className="card h-100">
+              <div className="card h-100 shadow-lg">
                 <img 
                   src={product.imageUrl === "" ? "../../public/img/no-hay-fotos.avif" : product.imageUrl } 
                   className="card-img-top img-fluid p-3" 
