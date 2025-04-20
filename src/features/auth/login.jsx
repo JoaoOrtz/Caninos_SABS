@@ -42,8 +42,7 @@ export const Login = () => {
   };
   return (
     <>
-      <Landing />
-      <div className="container-fluid py-5 mt-3 d-flex justify-content-center align-items-center bg-light">
+      <div className="container flex-grow-1 d-flex justify-content-center align-items-center pt-5 pb-4">
         <div
           className="row shadow rounded overflow-hidden"
           style={{ width: "900px", height: "500px" }}
@@ -107,5 +106,6 @@ export const Login = () => {
         </div>
       </div>
     </>
+    
   );
 };
