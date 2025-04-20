@@ -129,7 +129,12 @@ export const CategoryDashboard = () => {
                           AlertDeleteCategorie(
                             e.id,
                             "¿De seguro quieres eliminar esta categoría?",
-                            `La categoría que quieres eliminar es ${e.name}`
+                            `La categoría que quieres eliminar es ${e.name}`, () => {
+                              getCategories().then((response) => {
+                                const updateCategorie = response.data.categories || []
+                                setDataCategories(updateCategorie)
+                              })
+                            }
                           )
                         }
                       >

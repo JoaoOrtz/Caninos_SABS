@@ -9,7 +9,6 @@ export const SeeRol = ({ id }) => {
     const fetchData = async () => {
       const response = await getRol(id);
       setDataRol(response.data);
-      console.log(response);
     };
     fetchData();
   }, [id]);

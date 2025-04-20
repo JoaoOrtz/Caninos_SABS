@@ -49,7 +49,6 @@ export const FormRols = () => {
     }
 
     const response = await postRol(formRol);
-    console.log(response);
     if (response.status === 201) {
       navigate("/dashboard/Roles");
       AlertSuccess("Rol creado", "El rol se ha creado correctamente");
@@ -86,7 +85,6 @@ export const FormRols = () => {
   const checkRolName = async (rolName) => {
     try {
       const response = await getRols();
-      console.log(response);
 
       const rols = response.data || [];
       return rols.some(

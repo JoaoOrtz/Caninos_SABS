@@ -60,7 +60,6 @@ export const FormProduct = () => {
             return;
         }
         const response = await postProduct(formProduct)
-        console.log(response);
         if (response.data.status === "success") {
             navegate('/dashboard/Productos')
             AlertSuccess('Producto creado', 'El producto se ha creado correctamente')

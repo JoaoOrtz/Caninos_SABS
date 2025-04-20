@@ -36,10 +36,9 @@ export const RouteComponent = () => {
           <Route path="Sobre-Nosotros" element={<About />} />
           <Route path="productos" element={<ProductsLanding />} />
           <Route path="Categorias" element={<CategoriesLanding />} />
-        </Route>
-
-        {/* Ingreso */}
-        <Route path="/login" element={<Login />} />
+          {/* Ingreso */}
+          <Route path="login" element={<Login />} />
+        </Route>  
 
         {/* Rutas de la dashboard */}
         <Route
