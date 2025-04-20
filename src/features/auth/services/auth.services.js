@@ -3,6 +3,8 @@ import axios from "axios";
 const PostLogin = async (data) => {
   try {
     const response = await axios.post("http://localhost:3030/login", data);
+    console.log(response);
+    
     localStorage.setItem("Token", JSON.stringify(response.data.token))
     return response;
   } catch (error) {
@@ -16,6 +18,8 @@ const PostLogin = async (data) => {
 export const getLogin = async () => {
     try {
         const response = await axios.get('http://localhost:3030/login')
+        console.log(response);
+        
         return response.data
     } catch (error) {
         return {

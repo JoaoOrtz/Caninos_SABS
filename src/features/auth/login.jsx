@@ -18,10 +18,10 @@ export const Login = () => {
       [name]: value,
     });
   };
-  //
+
+
   const handleSubmit = async (e) => {
     e.preventDefault();
- 
     await PostLogin(formData);
     const logiados = await getLogin()
     const Token = localStorage.getItem('Token');
