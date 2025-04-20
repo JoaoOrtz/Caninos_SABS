@@ -21,7 +21,7 @@
     }, []);
 
     return (
-      <div className="container mt-4">
+      <div className="container pt-5 mt-5">
         <div className="row">
           {products.map((product) => (
             <div key={product.id} className="col-md-4 col-sm-6 mb-4">
