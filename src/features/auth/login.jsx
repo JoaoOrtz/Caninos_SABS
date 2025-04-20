@@ -28,14 +28,11 @@ export const Login = () => {
     e.preventDefault();
     await PostLogin(formData);
     const logiados = await getLogin()
-    
-    
     const Token = localStorage.getItem('Token');
     const user = logiados.find(e => e.email === formData.email)  
-    console.log(user);
      
     const rolUser = user.roleId
-    console.log(rolUser);
+
     
     localStorage.setItem('rolId', JSON.stringify(rolUser));
     if (Token) {
