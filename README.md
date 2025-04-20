@@ -84,7 +84,12 @@ npm run dev
 1. Clonar el backend (es un submodulo) desde:
 
 ```bash
-git clone https://github.com/Danier00/Api.git
+git clone --recurse-submodules https://github.com/usuario/repositorio.git
+```
+
+```bash
+cd Api
+git submodule update --init --recursive
 ```
 
 2. Configurar la base de datos y variables `.env`.
