@@ -19,7 +19,7 @@ export const RoleDashboard = () => {
     type: "warning"
   });
 
-  // Verificar categorías
+  // Verificar rol
   const checkRol = (rol) => {
     if (!rol || rol.length === 0) {
       setRolError({
