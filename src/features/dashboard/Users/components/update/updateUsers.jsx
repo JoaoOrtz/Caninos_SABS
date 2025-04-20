@@ -67,10 +67,26 @@ export const FormUserUpdate = () => {
     e.preventDefault();
     const response = await putUsers(id, formUser);
     if (response.status === 200) {
+      // Obtener el usuario actual del localStorage
+      const currentUser = JSON.parse(localStorage.getItem("User"));
+      
+      // Si el usuario que se está editando es el mismo que está en el localStorage
+      if (currentUser && currentUser.id === parseInt(id)) {
+        // Actualizar los datos en el localStorage
+        const updatedUser = {
+          ...currentUser,
+          fullName: formUser.fullName,
+          email: formUser.email,
+          roleId: formUser.roleId,
+          companyId: formUser.companyId
+        };
+        localStorage.setItem("User", JSON.stringify(updatedUser));
+      }
+      
       navegate("/dashboard/Usuarios");
       AlertSuccess(
         "Usuario actualizado",
-        "El usuario se a actualizado correctamente"
+        "El usuario se ha actualizado correctamente"
       );
     }
   };

@@ -1,7 +1,7 @@
-import React, { useEffect, useState, useMemo, use } from 'react';
+import React, { useEffect, useState, useMemo } from 'react';
 import { Link, Outlet, useNavigate } from 'react-router-dom';
 import { getRole } from './layout.service';
-import { getUsers } from './Users/services/users.service';
+import { getOneUser, getUsers } from './Users/services/users.service';
 
 export const Layout = () => {
   const navigate = useNavigate();
@@ -10,10 +10,12 @@ export const Layout = () => {
   const [invalidRole, setInvalidRole] = useState(false);
   const [loading, setLoading] = useState(true);
   const [user, setUser] = useState(true);
+  const [userName, setUserName] = useState();
 
   const logout = () => {
     localStorage.removeItem("Token");
     localStorage.removeItem("rolId");
+    localStorage.removeItem("User");
     navigate('/');
   };
 
@@ -58,6 +60,9 @@ export const Layout = () => {
         setInvalidRole(false);
         
         const rolId = localStorage.getItem('rolId');
+        const userR = JSON.parse(localStorage.getItem('User')) 
+               
+        setUserName(userR.fullName)
         if (!rolId) {
           setInvalidRole(true);
           return;
@@ -90,9 +95,13 @@ export const Layout = () => {
     if (!userRol || invalidRole) return [];
     
     const normalizedRole = normalizeRoleName(userRol.name);
+    const userR = JSON.parse(localStorage.getItem('User'));
 
     const roleLinks = {
       administrador: [
+        <li key="usuario" className="nav-item">
+          <Link to={`/dashboard/Usuario/${userR.id}`} className="nav-link text-white">Mi Perfil</Link>
+        </li>,
         <li key="usuarios" className="nav-item">
           <Link to="/dashboard/Usuarios" className="nav-link text-white">Usuarios</Link>
         </li>,
@@ -110,6 +119,9 @@ export const Layout = () => {
         </li>
       ],
       proveedor: [
+        <li key="perfil" className="nav-item">
+          <Link to={`/dashboard/Usuario/${userR.id}`} className="nav-link text-white">Mi Perfil</Link>
+        </li>,
         <li key="compañias" className="nav-item">
           <Link to="/dashboard/Categorias" className="nav-link text-white">Categorías</Link>
         </li>,
@@ -130,7 +142,7 @@ export const Layout = () => {
           <button className="btn btn-outline-primary d-md-none" onClick={toggleSidebar}>
             ☰
           </button>
-          <p className="h5 fw-semibold m-0">Bienvenido</p>
+          <p className="h5 fw-semibold m-0">Bienvenido {JSON.parse(localStorage.getItem("User"))?.fullName || 'Usuario'}</p>
         </div>
         <button onClick={logout} className="btn btn-danger">
           Salir

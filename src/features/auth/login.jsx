@@ -35,6 +35,7 @@ export const Login = () => {
     const rolUser = user.roleId
 
     localStorage.setItem('rolId', JSON.stringify(rolUser));
+    localStorage.setItem('User', JSON.stringify(user));
     if (Token) {
       navigate("/dashboard", { replace: true });
     }

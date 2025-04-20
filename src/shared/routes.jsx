@@ -22,6 +22,7 @@ import { FormRols } from "../features/dashboard/roles/components/create/formRole
 import { FormRolUpdate } from "../features/dashboard/roles/components/update/formRolUpdate";
 import { CreateCategorie } from "../features/dashboard/categories/components/create/createCategorie";
 import { UpdateCategorie } from "../features/dashboard/categories/components/update/UpdateCategorie";
+import { User } from "../features/dashboard/user";
 
 
 export const RouteComponent = () => {
@@ -52,9 +53,7 @@ export const RouteComponent = () => {
           <Route path="Usuarios" element={<UserDashboard />} /> 
           <Route path="nuevo-user" element={<CreateUser/>} />
           <Route path="editar-user/:id" element={<FormUserUpdate/>} />
-          <Route path="Usuarios" element={<UserDashboard />} /> 
-          <Route path="nuevo-user" element={<CreateUser/>} />
-          <Route path="editar-user/:id" element={<FormUserUpdate/>} />
+          <Route path="Usuario/:id" element={<User/>} />
           <Route path="Roles" element={<RoleDashboard />} />
           <Route path="nuevo-Rol" element={<FormRols/>} />
           <Route path="editar-Rol/:id" element={<FormRolUpdate/>} />
