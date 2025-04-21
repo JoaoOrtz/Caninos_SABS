@@ -1,93 +1,142 @@
 import React, { useEffect, useState } from "react";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { AlertSuccess } from "../../../../../shared/alert/success";
-import { getOneUser, putUsers } from "../../services/users.service";
+import { getOneUser, putUsers, getUsers } from "../../services/users.service";
 import { getRols } from "../../../roles/service/roles.service";
 import { getCompanies } from "../../../companies/services/companies.service";
 
 export const FormUserUpdate = () => {
+  const [alertError1, setAlertError1] = useState({
+    show: false,
+    title: "",
+    message: "",
+    type: "warning",
+  });
   const navigate = useNavigate();
   const { id } = useParams();
   const location = useLocation();
 
   const [companies, setCompanies] = useState([]);
   const [roles, setRoles] = useState([]);
+  
   const [formUser, setFormUser] = useState({
     fullName: "",
     email: "",
-    password: "",
     roleId: 0,
     companyId: 0,
   });
 
-  const isFromProfile = location.pathname.includes(`/dashboard/Usuario/${id}`);
-
-  const handleNavigationAfterSave = () => {
-    navigate(isFromProfile ? `/dashboard/Usuario/${id}` : "/dashboard/Usuarios");
-  };
-
-  const back = () => {
-    navigate(isFromProfile ? `/dashboard/Usuario/${id}` : "/dashboard/Usuarios");
-  };
-
-  const ChangeData = (e) => {
-    const { name, value } = e.target;
-    setFormUser({
-      ...formUser,
-      [name]: value,
-    });
-  };
-
-  const HandleSubmit = async (e) => {
-    e.preventDefault();
-    const response = await putUsers(id, formUser);
-    if (response.status === 200) {
-      const currentUser = JSON.parse(localStorage.getItem("User"));
-      if (currentUser && currentUser.id === parseInt(id)) {
-        const updatedUser = {
-          ...currentUser,
-          fullName: formUser.fullName,
-          email: formUser.email,
-          roleId: formUser.roleId,
-          companyId: formUser.companyId,
-        };
-        localStorage.setItem("User", JSON.stringify(updatedUser));
+  // Cargar roles
+  useEffect(() => {
+    const loadRoles = async () => {
+      try {
+        const response = await getRols();
+        setRoles(response.data);
+      } catch (error) {
+        console.error("Error cargando roles:", error);
       }
-      handleNavigationAfterSave();
-      AlertSuccess("Usuario actualizado", "El usuario se ha actualizado correctamente");
+    };
+    loadRoles();
+  }, []);
+
+  // Cargar compañías
+  useEffect(() => {
+    const loadCompanies = async () => {
+      try {
+        const response = await getCompanies();
+        setCompanies(response.data);
+      } catch (error) {
+        console.error("Error cargando compañías:", error);
+      }
+    };
+    loadCompanies();
+  }, []);
+
+  // Cargar datos del usuario
+  useEffect(() => {
+    const loadUser = async () => {
+      if (!id) return;
+      
+      try {
+        const response = await getOneUser(id);
+        if (response.data) {
+          setFormUser({
+            fullName: response.data.fullName,
+            email: response.data.email,
+            roleId: response.data.roleId,
+            companyId: response.data.companyId,
+          });
+        }
+      } catch (error) {
+        console.error("Error cargando usuario:", error);
+      }
+    };
+    loadUser();
+  }, [id]);
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormUser(prev => ({
+      ...prev,
+      [name]: value
+    }));
+  };
+
+  const checkUserEmail = async (email) => {
+    try {
+      const response = await getUsers();
+      const users = response.data || [];
+      return users.some(user => 
+        user.id !== parseInt(id) && 
+        user.email.toLowerCase() === email.toLowerCase()
+      );
+    } catch (error) {
+      console.error("Error verificando correo:", error);
+      return false;
     }
   };
 
-  useEffect(() => {
-    const loadData = async () => {
-      const [rolesRes, companiesRes, userRes] = await Promise.all([
-        getRols(),
-        getCompanies(),
-        id ? getOneUser(id) : Promise.resolve(null),
-      ]);
+  const validateEmail = async () => {
+    const email = formUser.email.trim();
+    if (!email) return true;
+    
+    const emailExists = await checkUserEmail(email);
+    if (emailExists) {
+      setAlertError1({
+        show: true,
+        title: "Error",
+        message: "El correo ya está registrado por otro usuario",
+        type: "danger",
+      });
+      return false;
+    }
+    setAlertError1(prev => ({ ...prev, show: false }));
+    return true;
+  };
 
-      setRoles(rolesRes.data);
-      setCompanies(companiesRes.data);
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    
+    const isValidEmail = await validateEmail();
+    if (!isValidEmail) return;
 
-      if (userRes?.data) {
-        setFormUser({
-          fullName: userRes.data.fullName,
-          email: userRes.data.email,
-          roleId: userRes.data.roleId,
-          companyId: userRes.data.companyId,
-        });
+    try {
+      const response = await putUsers(id, formUser);
+      if (response.status === 200) {
+        navigate("/dashboard/Usuarios");
+        AlertSuccess("Usuario actualizado", "Cambios guardados exitosamente");
       }
-    };
-
-    loadData();
-  }, [id]);
+    } catch (error) {
+      console.error("Error actualizando usuario:", error);
+    }
+  };
 
   return (
     <>
       <button
         type="button"
-        onClick={back}
-        className="btn btn-primary rounded-circle d-flex align-items-center p-2 justify-content-center"
+        onClick={() => navigate("/dashboard/Usuarios")}
+        className="btn btn-primary rounded-circle p-2"
         style={{ width: "40px", height: "40px" }}
       >
         <svg
@@ -102,78 +151,74 @@ export const FormUserUpdate = () => {
         </svg>
       </button>
 
-      <div className="container">
-        <h2 className="mb-4 mt-3">Formulario de actualización de Usuario</h2>
-        <form onSubmit={HandleSubmit}>
+      <div className="container mt-3">
+        {alertError1.show && (
+          <div className={`alert alert-${alertError1.type} alert-dismissible fade show`}>
+            <strong>{alertError1.title}</strong> {alertError1.message}
+          </div>
+        )}
+
+        <h2 className="mb-4">Editar Usuario</h2>
+        
+        <form onSubmit={handleSubmit}>
           <div className="mb-3">
-            <label htmlFor="nombre" className="form-label">
-              Nombre
-            </label>
+            <label className="form-label">Nombre completo</label>
             <input
               name="fullName"
               value={formUser.fullName}
-              onChange={ChangeData}
-              type="text"
+              onChange={handleChange}
               className="form-control"
-              placeholder="Ingrese el nuevo nombre del producto"
+              required
             />
           </div>
+
           <div className="mb-3">
-            <label htmlFor="nombre" className="form-label">
-              Correo Electronico
-            </label>
+            <label className="form-label">Correo electrónico</label>
             <input
+              type="email"
               name="email"
               value={formUser.email}
-              onChange={ChangeData}
-              type="text"
+              onChange={handleChange}
+              onBlur={validateEmail}
               className="form-control"
-              placeholder="Ingrese el nuevo correo del usuario"
+              required
             />
           </div>
+
           <div className="mb-3">
-            <label htmlFor="categoria" className="form-label">
-              Rol
-            </label>
+            <label className="form-label">Rol</label>
             <select
               name="roleId"
               value={formUser.roleId}
-              onChange={ChangeData}
+              onChange={handleChange}
               className="form-select"
-              id="role"
               required
             >
               <option value={0}>Seleccione un rol</option>
-              {roles.map((role) => (
-                <option key={role.id} value={role.id}>
-                  {role.name}
-                </option>
+              {roles.map(role => (
+                <option key={role.id} value={role.id}>{role.name}</option>
               ))}
             </select>
           </div>
+
           <div className="mb-3">
-            <label htmlFor="rol" className="form-label">
-              Compañia
-            </label>
+            <label className="form-label">Compañía</label>
             <select
               name="companyId"
               value={formUser.companyId}
-              onChange={ChangeData}
+              onChange={handleChange}
               className="form-select"
-              id="company"
               required
             >
-              <option value={0}>Seleccione una compañia</option>
-              {companies.map((company) => (
-                <option key={company.id} value={company.id}>
-                  {company.name}
-                </option>
+              <option value={0}>Seleccione una compañía</option>
+              {companies.map(company => (
+                <option key={company.id} value={company.id}>{company.name}</option>
               ))}
             </select>
           </div>
 
           <button type="submit" className="btn btn-primary">
-            Guardar
+            Guardar cambios
           </button>
         </form>
       </div>

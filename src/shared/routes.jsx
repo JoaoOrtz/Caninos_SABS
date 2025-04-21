@@ -15,13 +15,14 @@ import { CategoryDashboard } from "../features/dashboard/categories/category";
 import { PrivateRoute } from "../features/dashboard/components/privateRoutes";  // Si usas PrivateRoute
 import { FormProduct } from "../features/dashboard/products/components/create/formProduct";
 import { FormProductUpdate } from "../features/dashboard/products/components/update/formProductUpdate";
-import { ObjectVision } from "../features/dashboard/objetivevision/objetiveVision";
 import { CreateUser } from "../features/dashboard/Users/components/create/createUsers";
 import { FormUserUpdate } from "../features/dashboard/Users/components/update/updateUsers";
 import { FormRols } from "../features/dashboard/roles/components/create/formRoles";
 import { FormRolUpdate } from "../features/dashboard/roles/components/update/formRolUpdate";
 import { CreateCategorie } from "../features/dashboard/categories/components/create/createCategorie";
 import { UpdateCategorie } from "../features/dashboard/categories/components/update/UpdateCategorie";
+import { Informacion } from "../features/dashboard/informacion/informacion";
+import { UpdateInfo } from "../features/dashboard/informacion/components/updateInfo";
 import { User } from "../features/dashboard/user";
 import { CompanyLanding } from "../features/landing/companies/companies";
 
@@ -67,7 +68,8 @@ export const RouteComponent = () => {
           <Route path="categorias" element={<CategoryDashboard />} />
           <Route path="nueva-categoria" element={<CreateCategorie/>} />
           <Route path="editar-categoria/:id" element={<UpdateCategorie/>} />
-          <Route path="Objetico-Vision" element={<ObjectVision />} />
+          <Route path="Informacion" element={<Informacion/>} />
+          <Route path="Editar-info/:id" element={<UpdateInfo/>}/>
         </Route>
       </Routes>
     </>

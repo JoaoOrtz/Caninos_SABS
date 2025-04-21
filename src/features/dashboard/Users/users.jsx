@@ -68,10 +68,8 @@ export const UserDashboard = () => {
       setRoles(response.data);
       checkRole(response.data);
     };
-
     loadRoles();
   }, []);
-  // El array vacío asegura que solo se ejecute una vez al montar
   useEffect(() => {
     const loadCompanies = async () => {
       const response = await getCompanies();

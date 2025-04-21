@@ -116,7 +116,10 @@ export const Layout = () => {
         </li>,
         <li key="categorias" className="nav-item">
           <Link to="/dashboard/Categorias" className="nav-link text-white">Categorías</Link>
-        </li>
+        </li>,
+        <li key="infoemacion" className="nav-item">
+        <Link to="/dashboard/Informacion" className="nav-link text-white">Informacion Landig</Link>
+      </li>
       ],
       proveedor: [
         <li key="perfil" className="nav-item">
