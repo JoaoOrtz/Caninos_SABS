@@ -132,27 +132,27 @@ export const CreateUser = () => {
     return true; // Todos los campos son válidos
   };
 
-      const checkUserName = async (userName) => {
+      const checkUserEmail = async (userEmail) => {
           try {
               const response = await getUsers();
-              const products = response.data|| [];
+              const users = response.data|| [];
               return users.some(users => 
-                  users.name.trim().toLowerCase() === userName.trim().toLowerCase()
+                  users.email.trim().toLowerCase() === userEmail.trim().toLowerCase()
               );
           } catch (error) {
               console.error("Error al verificar el nombre del producto:", error);
               return false; // Asumimos que no existe para no bloquear la UI
           }
       };
-  const validatorName = async () => {
-    const name = formUsers.fullName.trim();
-    if (!name) return true; // Ya se valida en validateForm
-    const nameExists = await check(name);
-    if (nameExists) {
+  const validatorEmail = async () => {
+    const email = formUsers.email.trim();
+    if (!email) return true; // Ya se valida en validateForm
+    const emailExists = await checkUserEmail(email);
+    if (emailExists) {
       setAlertError1({
         show: true,
         title: "Error",
-        message: "Ya existe un producto con este nombre",
+        message: "Ya existe un Usuario con este correo",
         type: "danger",
       });
       return false;
@@ -205,7 +205,6 @@ export const CreateUser = () => {
             <input
               name="fullName" // Corrige el "name" para que coincida con el estado
               value={formUsers.fullName}
-              onBlur={validatorName}
               onChange={ChangeData}
               type="text"
               className="form-control"
@@ -220,6 +219,7 @@ export const CreateUser = () => {
             <input
               name="email"
               value={formUsers.email}
+              onBlur={validatorEmail}
               onChange={ChangeData}
               type="email"
               className="form-control"
