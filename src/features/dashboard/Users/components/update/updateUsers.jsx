@@ -6,19 +6,20 @@ import { getRols } from "../../../roles/service/roles.service";
 import { getCompanies } from "../../../companies/services/companies.service";
 
 export const FormUserUpdate = () => {
-  const [alertError1, setAlertError1] = useState({
+  const [alertError, setAlertError] = useState({
     show: false,
     title: "",
     message: "",
-    type: "warning",
+    type: "danger",
   });
+
   const navigate = useNavigate();
   const { id } = useParams();
   const location = useLocation();
 
   const [companies, setCompanies] = useState([]);
   const [roles, setRoles] = useState([]);
-  
+
   const [formUser, setFormUser] = useState({
     fullName: "",
     email: "",
@@ -26,59 +27,21 @@ export const FormUserUpdate = () => {
     companyId: 0,
   });
 
-  // Cargar roles
-  useEffect(() => {
-    const loadRoles = async () => {
-      try {
-        const response = await getRols();
-        setRoles(response.data);
-      } catch (error) {
-        console.error("Error cargando roles:", error);
-      }
-    };
-    loadRoles();
-  }, []);
+  const isFromProfile = location.pathname.includes(`/dashboard/Usuario/${id}`);
 
-  // Cargar compañías
-  useEffect(() => {
-    const loadCompanies = async () => {
-      try {
-        const response = await getCompanies();
-        setCompanies(response.data);
-      } catch (error) {
-        console.error("Error cargando compañías:", error);
-      }
-    };
-    loadCompanies();
-  }, []);
+  const handleNavigationAfterSave = () => {
+    navigate(isFromProfile ? `/dashboard/Usuario/${id}` : "/dashboard/Usuarios");
+  };
 
-  // Cargar datos del usuario
-  useEffect(() => {
-    const loadUser = async () => {
-      if (!id) return;
-      
-      try {
-        const response = await getOneUser(id);
-        if (response.data) {
-          setFormUser({
-            fullName: response.data.fullName,
-            email: response.data.email,
-            roleId: response.data.roleId,
-            companyId: response.data.companyId,
-          });
-        }
-      } catch (error) {
-        console.error("Error cargando usuario:", error);
-      }
-    };
-    loadUser();
-  }, [id]);
+  const back = () => {
+    navigate(isFromProfile ? `/dashboard/Usuario/${id}` : "/dashboard/Usuarios");
+  };
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormUser(prev => ({
+    setFormUser((prev) => ({
       ...prev,
-      [name]: value
+      [name]: value,
     }));
   };
 
@@ -86,9 +49,10 @@ export const FormUserUpdate = () => {
     try {
       const response = await getUsers();
       const users = response.data || [];
-      return users.some(user => 
-        user.id !== parseInt(id) && 
-        user.email.toLowerCase() === email.toLowerCase()
+      return users.some(
+        (user) =>
+          user.id !== parseInt(id) &&
+          user.email.toLowerCase() === email.toLowerCase()
       );
     } catch (error) {
       console.error("Error verificando correo:", error);
@@ -99,10 +63,10 @@ export const FormUserUpdate = () => {
   const validateEmail = async () => {
     const email = formUser.email.trim();
     if (!email) return true;
-    
+
     const emailExists = await checkUserEmail(email);
     if (emailExists) {
-      setAlertError1({
+      setAlertError({
         show: true,
         title: "Error",
         message: "El correo ya está registrado por otro usuario",
@@ -110,33 +74,72 @@ export const FormUserUpdate = () => {
       });
       return false;
     }
-    setAlertError1(prev => ({ ...prev, show: false }));
+    setAlertError((prev) => ({ ...prev, show: false }));
     return true;
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    
+
     const isValidEmail = await validateEmail();
     if (!isValidEmail) return;
 
     try {
       const response = await putUsers(id, formUser);
       if (response.status === 200) {
-        navigate("/dashboard/Usuarios");
-        AlertSuccess("Usuario actualizado", "Cambios guardados exitosamente");
+        const currentUser = JSON.parse(localStorage.getItem("User"));
+        if (currentUser && currentUser.id === parseInt(id)) {
+          const updatedUser = {
+            ...currentUser,
+            fullName: formUser.fullName,
+            email: formUser.email,
+            roleId: formUser.roleId,
+            companyId: formUser.companyId,
+          };
+          localStorage.setItem("User", JSON.stringify(updatedUser));
+        }
+        AlertSuccess("Usuario actualizado", "El usuario se ha actualizado correctamente");
+        handleNavigationAfterSave();
       }
     } catch (error) {
       console.error("Error actualizando usuario:", error);
     }
   };
 
+  useEffect(() => {
+    const loadData = async () => {
+      try {
+        const [rolesRes, companiesRes, userRes] = await Promise.all([
+          getRols(),
+          getCompanies(),
+          id ? getOneUser(id) : Promise.resolve(null),
+        ]);
+
+        setRoles(rolesRes.data);
+        setCompanies(companiesRes.data);
+
+        if (userRes?.data) {
+          setFormUser({
+            fullName: userRes.data.fullName,
+            email: userRes.data.email,
+            roleId: userRes.data.roleId,
+            companyId: userRes.data.companyId,
+          });
+        }
+      } catch (error) {
+        console.error("Error cargando datos:", error);
+      }
+    };
+
+    loadData();
+  }, [id]);
+
   return (
     <>
       <button
         type="button"
-        onClick={() => navigate("/dashboard/Usuarios")}
-        className="btn btn-primary rounded-circle p-2"
+        onClick={back}
+        className="btn btn-primary rounded-circle d-flex align-items-center p-2 justify-content-center"
         style={{ width: "40px", height: "40px" }}
       >
         <svg
@@ -152,14 +155,14 @@ export const FormUserUpdate = () => {
       </button>
 
       <div className="container mt-3">
-        {alertError1.show && (
-          <div className={`alert alert-${alertError1.type} alert-dismissible fade show`}>
-            <strong>{alertError1.title}</strong> {alertError1.message}
+        {alertError.show && (
+          <div className={`alert alert-${alertError.type} alert-dismissible fade show`}>
+            <strong>{alertError.title}</strong> {alertError.message}
           </div>
         )}
 
         <h2 className="mb-4">Editar Usuario</h2>
-        
+
         <form onSubmit={handleSubmit}>
           <div className="mb-3">
             <label className="form-label">Nombre completo</label>
@@ -195,8 +198,10 @@ export const FormUserUpdate = () => {
               required
             >
               <option value={0}>Seleccione un rol</option>
-              {roles.map(role => (
-                <option key={role.id} value={role.id}>{role.name}</option>
+              {roles.map((role) => (
+                <option key={role.id} value={role.id}>
+                  {role.name}
+                </option>
               ))}
             </select>
           </div>
@@ -211,8 +216,10 @@ export const FormUserUpdate = () => {
               required
             >
               <option value={0}>Seleccione una compañía</option>
-              {companies.map(company => (
-                <option key={company.id} value={company.id}>{company.name}</option>
+              {companies.map((company) => (
+                <option key={company.id} value={company.id}>
+                  {company.name}
+                </option>
               ))}
             </select>
           </div>
