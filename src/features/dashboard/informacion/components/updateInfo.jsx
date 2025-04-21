@@ -10,6 +10,7 @@ export const UpdateInfo = () => {
     tittleLanding: "",
     tittleWelcom: "",
     text1Welcom: "",
+    text2Welcom: "",
     imageLogoWelcom: "",
     tittleOffer: "",
     tittleOfferCard1: "",
@@ -134,10 +135,20 @@ export const UpdateInfo = () => {
                 />
               </div>
               <div className="mb-3">
-                <label className="form-label">Texto Bienvenida</label>
+                <label className="form-label">Texto Bienvenida 1</label>
                 <textarea
                   name="text1Welcom"
                   value={formInfo.text1Welcom}
+                  onChange={handleChange}
+                  className="form-control"
+                  rows="3"
+                />
+              </div>
+              <div className="mb-3">
+                <label className="form-label">Texto Bienvenida 2</label>
+                <textarea
+                  name="text2Welcom"
+                  value={formInfo.text2Welcom}
                   onChange={handleChange}
                   className="form-control"
                   rows="3"

@@ -96,6 +96,9 @@ export const Informacion = () => {
               <div>
                 <p className="text-secondary mb-2 fs-6">{mainData.text1Welcom}</p>
               </div>
+              <div>
+                <p className="text-secondary mb-2 fs-6">{mainData.text2Welcom}</p>
+              </div>
             </div>
           ),
           fullWidth: true,
