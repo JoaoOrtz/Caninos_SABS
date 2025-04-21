@@ -25,6 +25,7 @@ import { Informacion } from "../features/dashboard/informacion/informacion";
 import { UpdateInfo } from "../features/dashboard/informacion/components/updateInfo";
 import { User } from "../features/dashboard/user";
 import { CompanyLanding } from "../features/landing/companies/companies";
+import { Welcome } from "../features/dashboard/welcome/welcome";
 
 
 export const RouteComponent = () => {
@@ -53,6 +54,7 @@ export const RouteComponent = () => {
             </PrivateRoute>
           }
         >
+          <Route index element={<Welcome />} />
           <Route path="Usuarios" element={<UserDashboard />} /> 
           <Route path="Usuario/:id" element={<User/>} />
           <Route path="nuevo-user" element={<CreateUser/>} />
