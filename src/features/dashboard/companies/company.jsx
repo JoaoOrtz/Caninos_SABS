@@ -1,82 +1,170 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { deleteCompany, getCompanies } from './services/companies.service';
+import { getCompanies } from './services/companies.service';
+import { MdDelete } from 'react-icons/md';
+import { RiEditBoxLine } from 'react-icons/ri';
+import { SeeCompany } from './components/see/see';
+import { AlertDeleteCategorie } from './components/delete/deleteCompany';
 
 export const CompanyDashboard = () => {
-  const [companies, setCompanies] = useState([]);
-  const [toast, setToast] = useState({ show: false, message: '' });
-  const navigate = useNavigate();
+const navigate = useNavigate();
 
-  const fetchCompanies = async () => {
-    const res = await getCompanies();
-    setCompanies(res.data);
-  };
+  const [dataCompany, setDataCompany] = useState([]);
 
-  const handleDelete = async (id) => {
-    if (window.confirm("¿Estás seguro de eliminar esta compañía?")) {
-      await deleteCompany(id);
-      setToast({ show: true, message: 'Compañía eliminada correctamente' });
-      fetchCompanies();
+  const [companyError, setCompanyError] = useState({
+    show: false,
+    title: "",
+    message: "",
+    type: "warning",
+  });
+
+  // Verificar categoria
+  const checkCategory = (company) => {
+    if (!company || company.length === 0) {
+      setCompanyError({
+        show: true,
+        title: "Aviso",
+        message: "No se encontró ninguna compañia.",
+        type: "warning",
+      });
+      return true;
     }
+    setCompanyError({ ...companyError, show: false });
+    return false;
   };
 
   useEffect(() => {
-    fetchCompanies();
+    const data = async () => {
+      try {
+        const response = await getCompanies();
+        console.log(response);
+        
+        const company = response?.data || []        
+        setDataCompany(response.data);
+        checkCategory(company)
+      } catch (error) {
+        setCompanyError({
+          show: true,
+          title: "Error",
+          message: "Error al cargar las categorías",
+          type: "danger"
+        });
+        console.error("Error fetching roles:", err);
+      }
+    };
+    data();
   }, []);
 
+  const viewForm = () => {
+    navigate("/dashboard/nueva-compañia");
+  };
+
+  const viewUpdate = (id) => {
+    navigate(`/dashboard/editar-compañia/${id}`);
+  };
+
   return (
-    <div className="container mt-4">
-      <h2>Gestión de Compañías</h2>
-
-      <button className="btn btn-primary mb-3" onClick={() => navigate("/dashboard/nueva-compañia")}>
-        + Nueva Compañía
-      </button>
-
-      <table className="table table-striped table-bordered table-hover">
-        <thead>
-          <tr>
-            <th>Nombre</th>
-            <th>Dirección</th>
-            <th>Teléfono</th>
-            <th>Acciones</th>
-          </tr>
-        </thead>
-        <tbody>
-          {companies.map((company) => (
-            <tr key={company.id}>
-              <td>{company.name}</td>
-              <td>{company.address}</td>
-              <td>{company.phone}</td>
-              <td>
-                <button
-                  className="btn btn-warning btn-sm me-2"
-                  onClick={() => navigate(`/dashboard/editar-compañia/${company.id}`)}
-                >
-                  Editar
-                </button>
-                <button
-                  className="btn btn-danger btn-sm"
-                  onClick={() => handleDelete(company.id)}
-                >
-                  Eliminar
-                </button>
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
-
-      {/* Toast */}
-      {toast.show && (
-        <div className="toast-container position-fixed bottom-0 end-0 p-3">
-          <div className="toast show bg-success text-white" role="alert">
-            <div className="toast-body">
-              {toast.message}
-              <button type="button" className="btn-close btn-close-white ms-2" onClick={() => setToast({ ...toast, show: false })}></button>
-            </div>
+    <>
+      <div className="container-fluid">
+        <div className="row g-3 p-2 align-items-center">
+          <div className="col">
+            <h2>Lista De Compañias</h2>
+          </div>
+          <div className="col-auto ms-auto">
+            <button
+              type="button"
+              className="btn btn-primary"
+              onClick={viewForm}
+            >
+              Nueva Compañia
+            </button>
           </div>
         </div>
-      )}
-    </div>
+
+        {/* Mensaje de error para productos */}
+        {companyError.show && (
+          <div className={`alert alert-${companyError.type} alert-dismissible fade show mb-2`} role="alert">
+            <strong>{companyError.title}</strong> {companyError.message}
+          </div>
+        )}
+
+        <div className="table-responsive">
+          <table
+            className="table table-hover align-middle shadow-sm"
+            style={{
+              backgroundColor: "#fff",
+              borderRadius: "8px",
+              overflow: "hidden",
+            }}
+          >
+            <thead style={{ backgroundColor: "#f0f0f0" }}>
+              <tr>
+                <th>#</th>
+                <th>Nombre</th>
+                <th>NIT</th>
+                <th>Dirección</th>
+                <th>Telefono</th>
+                <th>Correo</th>
+                <th>Acciones</th>
+              </tr>
+            </thead>
+            <tbody>
+              {dataCompany.map((e, i) => (
+                <tr key={i}>
+                  <td>{e.id}</td>
+                  <td>{e.name}</td>
+                  <td>{e.nit}</td>
+                  <td>{e.address}</td>
+                  <td>{e.phone}</td>
+                  <td>{e.email}</td>
+                  <td
+                    style={{
+                      maxWidth: "250px",
+                      whiteSpace: "nowrap",
+                      overflow: "hidden",
+                      textOverflow: "ellipsis",
+                    }}
+                  >
+                    {e.description}
+                  </td>
+
+                  <td>
+                    <div className="btn-group" role="group">
+                      <button
+                        type="button"
+                        className="btn btn-outline-danger btn-sm"
+                        onClick={() =>
+                          AlertDeleteCategorie(
+                            e.id,
+                            "¿De seguro quieres eliminar esta categoría?",
+                            `La categoría que quieres eliminar es ${e.name}`, 
+                            () => {
+                              getCompanies().then((response) => {
+                                const updateCompany = response.data || []   
+                                setDataCompany(updateCompany)
+                              })
+                            }
+                          )
+                        }
+                      >
+                        <MdDelete />
+                      </button>
+                      <SeeCompany id={e.id} />
+                      <button
+                        type="button"
+                        className="btn btn-outline-success btn-sm"
+                        onClick={() => viewUpdate(e.id)}
+                      >
+                        <RiEditBoxLine />
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </>
   );
 };

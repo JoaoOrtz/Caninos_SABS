@@ -80,7 +80,9 @@ export const UpdateCompany = () => {
 
     try {
       const response = await putCompany(id, formCompany);
-      if (response.data.status === "success") {
+      console.log(response);
+      
+      if (response.status === 200) {
         navigate("/dashboard/Compañias");
         AlertSuccess(
           "Compañía actualizada",
@@ -323,9 +325,6 @@ export const UpdateCompany = () => {
 
           <button type="submit" className="btn btn-primary me-2">
             Actualizar
-          </button>
-          <button type="button" onClick={back} className="btn btn-secondary">
-            Cancelar
           </button>
         </form>
       </div>

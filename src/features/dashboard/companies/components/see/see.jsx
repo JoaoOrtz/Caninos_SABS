@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { FiEye } from "react-icons/fi";
-import { getCompany } from '../../services/companyService';
+import { getCompany } from '../../services/companies.service';
+
 
 export const SeeCompany = ({ id }) => {
     const [companyData, setCompanyData] = useState(null);
@@ -51,21 +52,19 @@ export const SeeCompany = ({ id }) => {
                                         <tr>
                                             <th>#</th>
                                             <th>Nombre</th>
-                                            <th>Descripción</th>
+                                            <th>NIT</th>
                                             <th>Dirección</th>
                                             <th>Teléfono</th>
-                                            <th>NIT</th>
-                                            <th>Email</th>
+                                            <th>Correo</th>
                                         </tr>
                                     </thead>
                                     <tbody>
                                         <tr>
                                             <td>{companyData.id}</td>
                                             <td>{companyData.name}</td>
-                                            <td>{companyData.description || 'N/A'}</td>
+                                            <td>{companyData.nit || 'N/A'}</td>
                                             <td>{companyData.address || 'N/A'}</td>
                                             <td>{companyData.phone || 'N/A'}</td>
-                                            <td>{companyData.nit || 'N/A'}</td>
                                             <td>{companyData.email || 'N/A'}</td>
                                         </tr>
                                     </tbody>

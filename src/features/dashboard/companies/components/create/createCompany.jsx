@@ -52,7 +52,7 @@ export const CreateCompany = () => {
       const response = await postCompany(formCompany);
 
       console.log("Response:", response); // Agregar un log para verificar la respuesta
-      if (response && response.data && response.data.status === "success") {
+      if (response.status === 201) {
         navigate("/dashboard/Compañias");
         AlertSuccess(
           "Compañía creada",
@@ -228,7 +228,7 @@ export const CreateCompany = () => {
         <form onSubmit={handleSubmit}>
           <div className="mb-3">
             <label htmlFor="nombre" className="form-label">
-              Nombre *
+              Nombre
             </label>
             <input
               name="name"
@@ -304,9 +304,6 @@ export const CreateCompany = () => {
 
           <button type="submit" className="btn btn-primary me-2">
             Guardar
-          </button>
-          <button type="button" onClick={back} className="btn btn-secondary">
-            Cancelar
           </button>
         </form>
       </div>
