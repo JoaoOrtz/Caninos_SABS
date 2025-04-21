@@ -26,6 +26,8 @@ import { UpdateInfo } from "../features/dashboard/informacion/components/updateI
 import { User } from "../features/dashboard/user";
 import { CompanyLanding } from "../features/landing/companies/companies";
 import { Welcome } from "../features/dashboard/welcome/welcome";
+import { CreateCompany } from "../features/dashboard/companies/components/create/createCompany";
+import { UpdateCompany } from "../features/dashboard/companies/components/update/updateCompany";
 
 
 export const RouteComponent = () => {
@@ -64,6 +66,8 @@ export const RouteComponent = () => {
           <Route path="nuevo-Rol" element={<FormRols/>} />
           <Route path="editar-Rol/:id" element={<FormRolUpdate/>} />
           <Route path="Compañias" element={<CompanyDashboard />} />
+          <Route path="nueva-compañia" element={<CreateCompany />} />
+          <Route path="editar-compañia/:id" element={<UpdateCompany />} />
           <Route path="Productos" element={<ProductDashboard />} />
           <Route path="nuevo-producto" element={<FormProduct />} />
           <Route path="editar-producto/:id" element={<FormProductUpdate />} />
@@ -77,3 +81,6 @@ export const RouteComponent = () => {
     </>
   );
 };
+
+
+
