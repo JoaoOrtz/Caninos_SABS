@@ -19,7 +19,7 @@ export const About = () => {
   const navigate = useNavigate();
 
   const irRegistro = () => {
-    navigate("/Registrarse");
+    navigate("/login");
   };
 
   return (
@@ -86,7 +86,7 @@ export const About = () => {
                     className="btn btn-primary btn-lg btn-about"
                     onClick={irRegistro}
                   >
-                    ¡Registrate!
+                    ¡Inicia Sesión!
                   </button>
                 </div>
               </div>

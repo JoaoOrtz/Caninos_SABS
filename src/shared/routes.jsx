@@ -54,10 +54,10 @@ export const RouteComponent = () => {
           }
         >
           <Route path="Usuarios" element={<UserDashboard />} /> 
+          <Route path="Usuario/:id" element={<User/>} />
           <Route path="nuevo-user" element={<CreateUser/>} />
           <Route path="editar-user/:id" element={<FormUserUpdate/>} />
-          <Route path="Usuario/:id" element={<User/>} />
-          <Route path="Usuario/:id/editar" element={<FormUserUpdate />} />
+          <Route path="Usuario/:id/editar" element={<FormUserUpdate/>} />
           <Route path="Roles" element={<RoleDashboard />} />
           <Route path="nuevo-Rol" element={<FormRols/>} />
           <Route path="editar-Rol/:id" element={<FormRolUpdate/>} />

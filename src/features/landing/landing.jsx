@@ -44,7 +44,7 @@ export const Landing = () => {
               </li>
               <li className="nav-item">
                 <Link className="nav-link active" to="/Compañias">
-                  Nuestros aliados
+                  Nuestros Aliados
                 </Link>
               </li>
               <li className="nav-item">

@@ -92,8 +92,6 @@ export const Login = () => {
                 />
               </div>
 
-              <p>¿No tienes una cuenta?<Link className="link-offset-2 link-underline link-underline-opacity-50" to="/Registrarse" ><br />¡Registrate acá!</Link></p>
-
               <button
                 type="submit"
                 className="btn btn-primary w-100 rounded-pill"
