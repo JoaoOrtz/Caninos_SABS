@@ -85,3 +85,24 @@
             return { data: { products: [] } }; // Devuelve una estructura consistente
         }
     }
+
+    // Agregar esta función al final de tu archivo product.service.js
+
+export const checkProductName = async (name) => {
+    try {
+      const response = await axios.get('http://localhost:3030/products');
+      
+      const products = response?.data?.products; // Suponiendo que la respuesta contiene una lista de productos
+  
+      // Verificar si ya existe un producto con el mismo nombre (ignorando mayúsculas/minúsculas)
+      const productExists = products.some(
+        (product) => product.name.trim().toLowerCase() === name.trim().toLowerCase()
+      );
+  
+      return productExists;
+    } catch (error) {
+      console.error("Error al verificar el nombre del producto:", error);
+      return false;
+    }
+  };
+  
