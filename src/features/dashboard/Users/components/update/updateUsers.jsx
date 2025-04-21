@@ -1,60 +1,35 @@
 import React, { useEffect, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { AlertSuccess } from "../../../../../shared/alert/success";
 import { getOneUser, putUsers } from "../../services/users.service";
 import { getRols } from "../../../roles/service/roles.service";
 import { getCompanies } from "../../../companies/services/companies.service";
 
 export const FormUserUpdate = () => {
-  const navegate = useNavigate();
+  const navigate = useNavigate();
   const { id } = useParams();
+  const location = useLocation();
+
   const [companies, setCompanies] = useState([]);
   const [roles, setRoles] = useState([]);
-  //Objeto de datos
   const [formUser, setFormUser] = useState({
     fullName: "",
     email: "",
     password: "",
     roleId: 0,
-    companyId:0,
+    companyId: 0,
   });
 
-  // Cargar los roles cuando el componente se monte
-  useEffect(() => {
-    const loadRoles = async () => {
-      const response = await getRols();
-      setRoles(response.data);
-    };
+  const isFromProfile = location.pathname.includes(`/dashboard/Usuario/${id}`);
 
-    loadRoles();
-  }, []);
-  // El array vacío asegura que solo se ejecute una vez al montar
-  useEffect(() => {
-    const loadCompanies = async () => {
-      const response = await getCompanies();
-      setCompanies(response.data);
-    };
+  const handleNavigationAfterSave = () => {
+    navigate(isFromProfile ? `/dashboard/Usuario/${id}` : "/dashboard/Usuarios");
+  };
 
-    loadCompanies();
-  }, []);
-  useEffect(() => {
-    const data = async () => {
-      if (id) {
-        const response = await getOneUser(id);
-        if (response.data) {
-          setFormUser({
-            fullName: response.data.fullName,
-            email: response.data.email,
-            roleId: response.data.roleId,
-            companyId: response.data.companyId,
-          });
-        }
-      }
-    };
-    data();
-  }, [id]);
+  const back = () => {
+    navigate(isFromProfile ? `/dashboard/Usuario/${id}` : "/dashboard/Usuarios");
+  };
 
-  //Funcion para recolección los datos
   const ChangeData = (e) => {
     const { name, value } = e.target;
     setFormUser({
@@ -63,37 +38,49 @@ export const FormUserUpdate = () => {
     });
   };
 
-  const HandleSubmint = async (e) => {
+  const HandleSubmit = async (e) => {
     e.preventDefault();
     const response = await putUsers(id, formUser);
     if (response.status === 200) {
-      // Obtener el usuario actual del localStorage
       const currentUser = JSON.parse(localStorage.getItem("User"));
-      
-      // Si el usuario que se está editando es el mismo que está en el localStorage
       if (currentUser && currentUser.id === parseInt(id)) {
-        // Actualizar los datos en el localStorage
         const updatedUser = {
           ...currentUser,
           fullName: formUser.fullName,
           email: formUser.email,
           roleId: formUser.roleId,
-          companyId: formUser.companyId
+          companyId: formUser.companyId,
         };
         localStorage.setItem("User", JSON.stringify(updatedUser));
       }
-      
-      navegate("/dashboard/Usuarios");
-      AlertSuccess(
-        "Usuario actualizado",
-        "El usuario se ha actualizado correctamente"
-      );
+      handleNavigationAfterSave();
+      AlertSuccess("Usuario actualizado", "El usuario se ha actualizado correctamente");
     }
   };
 
-  const back = () => {
-    navegate("/dashboard/Usuarios");
-  };
+  useEffect(() => {
+    const loadData = async () => {
+      const [rolesRes, companiesRes, userRes] = await Promise.all([
+        getRols(),
+        getCompanies(),
+        id ? getOneUser(id) : Promise.resolve(null),
+      ]);
+
+      setRoles(rolesRes.data);
+      setCompanies(companiesRes.data);
+
+      if (userRes?.data) {
+        setFormUser({
+          fullName: userRes.data.fullName,
+          email: userRes.data.email,
+          roleId: userRes.data.roleId,
+          companyId: userRes.data.companyId,
+        });
+      }
+    };
+
+    loadData();
+  }, [id]);
 
   return (
     <>
@@ -111,17 +98,13 @@ export const FormUserUpdate = () => {
           stroke="currentColor"
           style={{ width: "20px", height: "20px" }}
         >
-          <path
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            d="M15.75 19.5L8.25 12l7.5-7.5"
-          />
+          <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5" />
         </svg>
       </button>
 
       <div className="container">
         <h2 className="mb-4 mt-3">Formulario de actualización de Usuario</h2>
-        <form onSubmit={HandleSubmint}>
+        <form onSubmit={HandleSubmit}>
           <div className="mb-3">
             <label htmlFor="nombre" className="form-label">
               Nombre
@@ -153,19 +136,17 @@ export const FormUserUpdate = () => {
               Rol
             </label>
             <select
-              name="roleyId"
+              name="roleId"
               value={formUser.roleId}
               onChange={ChangeData}
               className="form-select"
               id="role"
               required
             >
-              <option key={0} value={0}>
-                Seleccione un rol
-              </option>
-              {roles.map((e, i) => (
-                <option key={i} value={e.id}>
-                  {e.name}
+              <option value={0}>Seleccione un rol</option>
+              {roles.map((role) => (
+                <option key={role.id} value={role.id}>
+                  {role.name}
                 </option>
               ))}
             </select>
@@ -175,7 +156,7 @@ export const FormUserUpdate = () => {
               Compañia
             </label>
             <select
-              name="companyId" // Corrige el nombre a "roleId"
+              name="companyId"
               value={formUser.companyId}
               onChange={ChangeData}
               className="form-select"

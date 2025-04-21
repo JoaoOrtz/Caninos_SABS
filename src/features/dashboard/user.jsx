@@ -35,8 +35,8 @@
             fetchUsers();
         }, [id]);
 
-        const viewUpdate = (id) =>{
-            navegate("/dashboard/editar-user/" + id)
+        const viewUpdate = (id) => {
+            navegate(`/dashboard/Usuario/${id}/editar`);
         }
 
 
