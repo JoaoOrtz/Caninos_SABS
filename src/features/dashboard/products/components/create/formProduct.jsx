@@ -39,7 +39,7 @@ export const FormProduct = () => {
             setCategories(response.data.categories)
         }
         data()
-    })
+    },[])
 
     //Funcion para recolección los datos
     const ChangeData = (e) => {
@@ -60,7 +60,6 @@ export const FormProduct = () => {
             return;
         }
         const response = await postProduct(formProduct)
-        console.log(response);
         if (response.data.status === "success") {
             navegate('/dashboard/Productos')
             AlertSuccess('Producto creado', 'El producto se ha creado correctamente')

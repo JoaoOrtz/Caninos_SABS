@@ -50,7 +50,6 @@ const HandleSubmit = async (e) => {
 
     try {
         const response = await postCategorie(formCategorie)
-        console.log(response)
         if (response.data.status === "success") {
             AlertSuccess('Categoría creada','La categoría se ha creado correctamente')
             navigate('/dashboard/categorias')

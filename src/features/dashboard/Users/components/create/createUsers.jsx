@@ -63,7 +63,6 @@ export const CreateUser = () => {
     }
     try {
       const response = await postUsers(formUsers);
-      console.log(response);
       if (response.status === 201) {
         AlertSuccess("Usuario creado", "El usuario se ha creado correctamente");
         navigate("/dashboard/Usuarios"); // Redirige a la página de usuarios

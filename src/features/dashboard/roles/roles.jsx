@@ -54,7 +54,7 @@ export const RoleDashboard = () => {
       }
     };
     data();
-  }, [dataRols]);
+  }, []);
 
   const viewForm = () => {
     navigate("/dashboard/nuevo-Rol");
@@ -124,7 +124,13 @@ export const RoleDashboard = () => {
                           AlertDeleteRol(
                             e.id,
                             "¿De seguro quieres eliminar el rol?",
-                            `El rol que quieres eliminar es ${e.name}`
+                            `El rol que quieres eliminar es ${e.name}`,
+                            () => {
+                              getRols().then((response) =>{
+                                const updateRols = response.data || [];
+                                setDataRols(updateRols)
+                              }) 
+                            }
                           )
                         }
                       >

@@ -8,6 +8,7 @@ import { IoPerson } from "react-icons/io5";
 export const Landing = () => {
   return (
     <>
+    <div className="d-flex flex-column min-vh-100">
       <nav className="navbar navbar-expand-lg navbar-dark bg-primary fixed-top">
         <div className="container-fluid">
           <Link className="navbar-brand" to="/">
@@ -42,8 +43,8 @@ export const Landing = () => {
                 </Link>
               </li>
               <li className="nav-item">
-                <Link className="nav-link active" to="/Servicios">
-                  Nuestros empresas
+                <Link className="nav-link active" to="/Compañias">
+                  Nuestros aliados
                 </Link>
               </li>
               <li className="nav-item">
@@ -76,6 +77,7 @@ export const Landing = () => {
           </p>
         </div>
       </footer>
+      </div>
     </>
   );
 };

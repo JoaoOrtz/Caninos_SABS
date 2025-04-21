@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { Landing } from "../landing/landing";
 import { getLogin, PostLogin } from "./services/auth.services"
 import { AlertError } from "../../shared/alert/error";
 
@@ -20,9 +19,7 @@ export const Login = () => {
       [name]: value,
     });
   };
-
-
-
+  
   //
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -30,11 +27,12 @@ export const Login = () => {
     const logiados = await getLogin()
     const Token = localStorage.getItem('Token');
     const user = logiados.find(e => e.email === formData.email)  
+     console.log("informacion del usuario",user);
      
     const rolUser = user.roleId
 
-    
     localStorage.setItem('rolId', JSON.stringify(rolUser));
+    localStorage.setItem('User', JSON.stringify(user));
     if (Token) {
       navigate("/dashboard", { replace: true });
     }
@@ -44,8 +42,7 @@ export const Login = () => {
   };
   return (
     <>
-      <Landing />
-      <div className="container-fluid py-5 mt-3 d-flex justify-content-center align-items-center bg-light">
+      <div className="container flex-grow-1 d-flex justify-content-center align-items-center pt-5 pb-4">
         <div
           className="row shadow rounded overflow-hidden"
           style={{ width: "900px", height: "500px" }}
@@ -109,5 +106,6 @@ export const Login = () => {
         </div>
       </div>
     </>
+    
   );
 };

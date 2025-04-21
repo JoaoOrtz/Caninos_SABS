@@ -14,7 +14,6 @@ export const getCategories = async () => {
 
 export const postCategorie = async (data) => {
   try {
-    console.log(data);
     const response = await axios.post("http://localhost:3030/categories", data);
     return response;
   } catch (error) {

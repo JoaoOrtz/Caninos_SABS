@@ -23,6 +23,8 @@ import { CreateCategorie } from "../features/dashboard/categories/components/cre
 import { UpdateCategorie } from "../features/dashboard/categories/components/update/UpdateCategorie";
 import { Informacion } from "../features/dashboard/informacion/informacion";
 import { UpdateInfo } from "../features/dashboard/informacion/components/updateInfo";
+import { User } from "../features/dashboard/user";
+import { CompanyLanding } from "../features/landing/companies/companies";
 
 
 export const RouteComponent = () => {
@@ -36,10 +38,11 @@ export const RouteComponent = () => {
           <Route path="Sobre-Nosotros" element={<About />} />
           <Route path="productos" element={<ProductsLanding />} />
           <Route path="Categorias" element={<CategoriesLanding />} />
-        </Route>
+          <Route path="Compañias" element={<CompanyLanding />} />
 
-        {/* Ingreso */}
-        <Route path="/login" element={<Login />} />
+          {/* Ingreso */}
+          <Route path="login" element={<Login />} />
+        </Route>  
 
         {/* Rutas de la dashboard */}
         <Route
@@ -53,9 +56,7 @@ export const RouteComponent = () => {
           <Route path="Usuarios" element={<UserDashboard />} /> 
           <Route path="nuevo-user" element={<CreateUser/>} />
           <Route path="editar-user/:id" element={<FormUserUpdate/>} />
-          <Route path="Usuarios" element={<UserDashboard />} /> 
-          <Route path="nuevo-user" element={<CreateUser/>} />
-          <Route path="editar-user/:id" element={<FormUserUpdate/>} />
+          <Route path="Usuario/:id" element={<User/>} />
           <Route path="Roles" element={<RoleDashboard />} />
           <Route path="nuevo-Rol" element={<FormRols/>} />
           <Route path="editar-Rol/:id" element={<FormRolUpdate/>} />
