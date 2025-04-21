@@ -14,11 +14,11 @@ export const FormProductUpdate = () => {
     price: "",
     stock: "",
     imageUrl: "",
-    categoryId: "",
+    categoryId: ""
   });
 
   const [originalValues, setOriginalValues] = useState({
-    name: "",
+    name: ""
   });
 
   const [categories, setCategories] = useState([]);
@@ -27,7 +27,7 @@ export const FormProductUpdate = () => {
     show: false,
     title: "",
     message: "",
-    type: "warning",
+    type: "warning"
   });
 
   useEffect(() => {

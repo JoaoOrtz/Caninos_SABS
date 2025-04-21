@@ -61,3 +61,26 @@ export const getRol = async (id) => {
     }
 }
 
+// -------------------------------
+
+export const checkRolName = async (name) => {
+    try {
+        const response = await axios.get('http://localhost:3030/roles')
+
+        const rols = response?.data // Suponiendo que la respuesta contiene una lista de productos
+  
+        // Verificar si ya existe un producto con el mismo nombre (ignorando mayúsculas/minúsculas)
+        console.log(response)
+
+        const rolExists = rols.some(
+            (rol) => rol.name.trim().toLowerCase() === name.trim().toLowerCase()
+        )
+
+        return rolExists
+
+    } catch (error) {
+        console.error("Error al verificar el nombre del rol:", error);
+        return false;
+    }
+}
+

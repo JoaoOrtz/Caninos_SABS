@@ -57,3 +57,23 @@ export const getCategorie = async (id) => {
           message: "lo sentimos, se ha producido un error" };
     }
   };
+
+  // --------------------------------
+
+  export const checkCategorieName = async (name) => {
+    try {
+      const response = await axios.get('http://localhost:3030/categories')
+
+      const categories = response?.data?.categories// Suponiendo que la respuesta contiene una lista de productos      
+  
+      // Verificar si ya existe un producto con el mismo nombre (ignorando mayúsculas/minúsculas)
+
+      const categorieExists = categories.some((categorie) => categorie.name.trim().toLowerCase() === name.trim().toLowerCase())
+
+      return categorieExists;
+
+    } catch (error) {
+      console.error("Error al verificar el nombre de la categoría: ", error)
+      return false;
+    }
+  }

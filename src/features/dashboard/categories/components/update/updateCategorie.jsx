@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { AlertSuccess } from "../../../../../shared/alert/success";
-import { getCategorie, putCategorie } from "../../service/serviceCategorie";
+import { checkCategorieName, getCategorie, putCategorie } from "../../service/serviceCategorie";
 
 export const UpdateCategorie = () => {
   const navigate = useNavigate();
@@ -14,16 +14,13 @@ export const UpdateCategorie = () => {
     description: "",
   });
 
+  const [originalValues, setOriginalValues] = useState({ 
+    name: ""
+  })
+
   // se define las variables que contendrán las alertas
 
   const [alertError, setAlertError] = useState({
-    show: false,
-    title: "",
-    message: "",
-    type: "warning",
-  });
-
-  const [alertError1, setAlertError1] = useState({
     show: false,
     title: "",
     message: "",
@@ -39,6 +36,10 @@ export const UpdateCategorie = () => {
             name: response.data.category.name,
             description: response.data.category.description,
           });
+
+          setOriginalValues({
+            name: response.data.category.name
+          })
         }
       }
     };
@@ -55,6 +56,29 @@ export const UpdateCategorie = () => {
       [name]: value,
     });
   };
+
+  const validatorName = async () => {
+    const name = formCategorie.name.trim()
+    const originalName = originalValues.name.trim()
+
+    if (name.toLowerCase() === originalName.toLowerCase()) {
+      return true;  // no ha cambiado, no valida
+    }
+
+    const nameExists = await checkCategorieName(name)
+    if (nameExists) {
+      setAlertError({
+        show: true,
+        title: "Error",
+        message: "Ya existe un rol con este nombre",
+        type: "danger",
+      })
+      return false
+    }
+
+    setAlertError((prev) => ({ ...prev, show: false }));
+    return true
+  }
 
   const HandleSubmit = async (e) => {
     e.preventDefault();
@@ -98,41 +122,6 @@ export const UpdateCategorie = () => {
       return false;
     }
 
-    return true;
-  };
-
-  const checkCategorieName = async (categorieName) => {
-    try {
-      const response = await getCategorie();
-      const categorie = response.data || [];
-      
-      return categorie.some(
-        (categorie) =>
-          categorie.name.trim().toLowerCase() ===
-          categorieName.trim().toLowerCase()
-      );
-    } catch (error) {
-      console.error("Error al verificar el nombre del rol:", error);
-      return false; // Asumimos que no existe para no bloquear la UI
-    }
-  };
-
-  const validatorName = async () => {
-    const name = formCategorie.name.trim();
-    if (!name) return true; // Ya se valida en validateForm
-
-    const nameExists = await checkCategorieName(name);
-    if (nameExists) {
-      setAlertError({
-        show: true,
-        title: "Error",
-        message: "Ya existe una categoria con este nombre",
-        type: "danger",
-      });
-      return false;
-    }
-
-    setAlertError((prev) => ({ ...prev, show: false }));
     return true;
   };
 
