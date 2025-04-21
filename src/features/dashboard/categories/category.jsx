@@ -38,7 +38,7 @@ export const CategoryDashboard = () => {
     const data = async () => {
       try {
         const response = await getCategories();
-        const categorie = response?.data || []
+        const categorie = response?.data.categories || []        
         setDataCategories(response.data.categories);
         checkCategorie(categorie)
       } catch (error) {
@@ -129,9 +129,10 @@ export const CategoryDashboard = () => {
                           AlertDeleteCategorie(
                             e.id,
                             "¿De seguro quieres eliminar esta categoría?",
-                            `La categoría que quieres eliminar es ${e.name}`, () => {
+                            `La categoría que quieres eliminar es ${e.name}`, 
+                            () => {
                               getCategories().then((response) => {
-                                const updateCategorie = response.data.categories || []
+                                const updateCategorie = response.data.categories || []                              
                                 setDataCategories(updateCategorie)
                               })
                             }

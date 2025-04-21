@@ -39,7 +39,7 @@ export const FormProduct = () => {
             setCategories(response.data.categories)
         }
         data()
-    })
+    },[])
 
     //Funcion para recolección los datos
     const ChangeData = (e) => {

@@ -23,6 +23,7 @@ import { FormRolUpdate } from "../features/dashboard/roles/components/update/for
 import { CreateCategorie } from "../features/dashboard/categories/components/create/createCategorie";
 import { UpdateCategorie } from "../features/dashboard/categories/components/update/UpdateCategorie";
 import { User } from "../features/dashboard/user";
+import { CompanyLanding } from "../features/landing/companies/companies";
 
 
 export const RouteComponent = () => {
@@ -36,6 +37,8 @@ export const RouteComponent = () => {
           <Route path="Sobre-Nosotros" element={<About />} />
           <Route path="productos" element={<ProductsLanding />} />
           <Route path="Categorias" element={<CategoriesLanding />} />
+          <Route path="Compañias" element={<CompanyLanding />} />
+
           {/* Ingreso */}
           <Route path="login" element={<Login />} />
         </Route>  

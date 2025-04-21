@@ -43,8 +43,8 @@ export const Landing = () => {
                 </Link>
               </li>
               <li className="nav-item">
-                <Link className="nav-link active" to="/Servicios">
-                  Nuestros empresas
+                <Link className="nav-link active" to="/Compañias">
+                  Nuestros aliados
                 </Link>
               </li>
               <li className="nav-item">
