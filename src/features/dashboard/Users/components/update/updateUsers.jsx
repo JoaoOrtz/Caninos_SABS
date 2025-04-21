@@ -4,6 +4,37 @@ import { AlertSuccess } from "../../../../../shared/alert/success";
 import { getOneUser, putUsers, getUsers } from "../../services/users.service";
 import { getRols } from "../../../roles/service/roles.service";
 import { getCompanies } from "../../../companies/services/companies.service";
+import { getRole } from "../../../layout.service";
+
+// Función para normalizar nombres de roles
+const normalizeRoleName = (name) => {
+  if (!name) return "";
+  const lowerName = name.toLowerCase().trim();
+
+  // Parte de administrador
+  if (lowerName.includes("admin")) return "administrador";
+  if (lowerName.includes("administradora")) return "administrador";
+  if (lowerName.includes("superadmin")) return "administrador";
+  if (lowerName.includes("superadministrador")) return "administrador";
+  if (lowerName.includes("superadmintradora")) return "administrador";
+  if (lowerName.includes("gerente")) return "administrador";
+  if (lowerName.includes("director")) return "administrador";
+
+  // Parte de proveedor
+  if (lowerName.includes("empresa")) return "proveedor";
+  if (lowerName.includes("proveedora")) return "proveedor";
+  if (lowerName.includes("abastecedor")) return "proveedor";
+  if (lowerName.includes("abastecedora")) return "proveedor";
+  if (lowerName.includes("provisor")) return "proveedor";
+  if (lowerName.includes("provisora")) return "proveedor";
+  if (lowerName.includes("suministrador")) return "proveedor";
+  if (lowerName.includes("suministradora")) return "proveedor";
+  if (lowerName.includes("distribuidor")) return "proveedor";
+  if (lowerName.includes("distribuidora")) return "proveedor";
+  if (lowerName.includes("agente")) return "proveedor";
+
+  return "otro";
+};
 
 export const FormUserUpdate = () => {
   const [alertError, setAlertError] = useState({
@@ -26,6 +57,8 @@ export const FormUserUpdate = () => {
     roleId: 0,
     companyId: 0,
   });
+
+  const [userRole, setUserRole] = useState(""); // Rol actual del usuario
 
   const isFromProfile = location.pathname.includes(`/dashboard/Usuario/${id}`);
 
@@ -126,6 +159,11 @@ export const FormUserUpdate = () => {
             companyId: userRes.data.companyId,
           });
         }
+
+        const currentUser = JSON.parse(localStorage.getItem("User"));
+        const rawRoleName = await getRole(parseInt(currentUser.roleId));;
+        setUserRole(normalizeRoleName(rawRoleName.data.name)); 
+        
       } catch (error) {
         console.error("Error cargando datos:", error);
       }
@@ -133,7 +171,7 @@ export const FormUserUpdate = () => {
 
     loadData();
   }, [id]);
-
+  
   return (
     <>
       <button
@@ -188,23 +226,25 @@ export const FormUserUpdate = () => {
             />
           </div>
 
-          <div className="mb-3">
-            <label className="form-label">Rol</label>
-            <select
-              name="roleId"
-              value={formUser.roleId}
-              onChange={handleChange}
-              className="form-select"
-              required
-            >
-              <option value={0}>Seleccione un rol</option>
-              {roles.map((role) => (
-                <option key={role.id} value={role.id}>
-                  {role.name}
-                </option>
-              ))}
-            </select>
-          </div>
+          {userRole === "administrador" && (
+            <div className="mb-3">
+              <label className="form-label">Rol</label>
+              <select
+                name="roleId"
+                value={formUser.roleId}
+                onChange={handleChange}
+                className="form-select"
+                required
+              >
+                <option value={0}>Seleccione un rol</option>
+                {roles.map((role) => (
+                  <option key={role.id} value={role.id}>
+                    {role.name}
+                  </option>
+                ))}
+              </select>
+            </div>
+          )}
 
           <div className="mb-3">
             <label className="form-label">Compañía</label>
