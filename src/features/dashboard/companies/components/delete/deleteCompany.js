@@ -1,6 +1,6 @@
 import { deleteCompany } from '../../services/companies.service';
 
-export const AlertDeleteCategorie = (id, title, message, refreshData) => { 
+export const AlertDeleteCompany = (id, title, message, refreshData) => { 
   Swal.fire({
     title: title,
     text: message,

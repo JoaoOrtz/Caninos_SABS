@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { AlertSuccess } from "../../../../../shared/alert/success";
 import { getCompanies, postCompany } from "../../services/companies.service";
@@ -6,7 +6,6 @@ import { getCompanies, postCompany } from "../../services/companies.service";
 export const CreateCompany = () => {
   const navigate = useNavigate();
 
-  // Objeto de datos
   const [formCompany, setFormCompany] = useState({
     name: "",
     nit: "",
@@ -29,7 +28,6 @@ export const CreateCompany = () => {
     type: "warning",
   });
 
-  // Función para recolección de los datos
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormCompany({
@@ -41,31 +39,21 @@ export const CreateCompany = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    const isNameValid = await validateName();
-    if (!isNameValid) return;
-
     if (!validateForm()) {
+      return;
+    }
+
+    // Validar unicidad de todos los campos relevantes
+    const isUnique = await validatorExisting();
+    if (!isUnique) {
       return;
     }
 
     try {
       const response = await postCompany(formCompany);
-
-      console.log("Response:", response); // Agregar un log para verificar la respuesta
       if (response.status === 201) {
         navigate("/dashboard/Compañias");
-        AlertSuccess(
-          "Compañía creada",
-          "La compañía se ha creado correctamente"
-        );
-      } else {
-        // Manejo de un caso en el que la respuesta no sea la esperada
-        setAlertError({
-          show: true,
-          title: "Error",
-          message: "Hubo un problema al crear la compañía. Intenta de nuevo.",
-          type: "danger",
-        });
+        AlertSuccess("Compañía creada", "La compañía se ha creado correctamente");
       }
     } catch (error) {
       console.error("Error creating company:", error);
@@ -78,10 +66,8 @@ export const CreateCompany = () => {
     }
   };
 
-  // Validación de datos vacíos
   const validateForm = () => {
     // Verificar campos obligatorios
-    console.log(formCompany); // Ver qué datos estamos validando
     if (!formCompany.name.trim()) {
       setAlertError({
         show: true,
@@ -92,44 +78,71 @@ export const CreateCompany = () => {
       return false;
     }
 
-    // Verificación de descripción si la incluyes
-    if (formCompany.description && formCompany.description.length > 255) {
+    if (!formCompany.address.trim()) {
       setAlertError({
         show: true,
         title: "Error",
-        message: "La descripción no puede exceder 255 caracteres",
+        message: "La dirección de la compañía es obligatorio",
+        type: "danger",
+      });
+      return false;
+    }
+
+    if (!formCompany.phone || parseInt(formCompany.phone) <= 0) {
+      setAlertError({
+        show: true,
+        title: "Error",
+        message: "El teléfono de la compañía es obligatorio",
+        type: "danger",
+      });
+      return false;
+    }
+
+    if (!formCompany.nit.trim()) {
+      setAlertError({
+        show: true,
+        title: "Error",
+        message: "El NIT es obligatorio",
+        type: "danger",
+      });
+      return false;
+    }
+
+    if (!formCompany.email.trim()) {
+      setAlertError({
+        show: true,
+        title: "Error",
+        message: "El correo es obligatorio",
+        type: "danger",
+      });
+      return false;
+    }
+
+
+    // Validación de NIT
+    if (!/^\d{9}-\d{1}$/.test(formCompany.nit)) {
+      setAlertError({
+        show: true,
+        title: "Error",
+        message: "NIT inválido y solo debe de tener 9 digitos y 1 digito despues del guion (debe ser en formato 123456789-7)",
         type: "danger",
       });
       return false;
     }
 
     // Validación de teléfono
-    if (formCompany.phone && !/^\d{7,15}$/.test(formCompany.phone)) {
+    if (!/^\d{10}$/.test(formCompany.phone)) {
       setAlertError({
         show: true,
         title: "Error",
-        message: "Teléfono inválido (solo números, 7-15 dígitos)",
-        type: "danger",
-      });
-      return false;
-    }
-
-    // Validación de NIT
-    if (formCompany.nit && !/^\d{6,15}-\d{1}$/.test(formCompany.nit)) {
-      setAlertError({
-        show: true,
-        title: "Error",
-        message: "NIT inválido (debe ser en formato 900123456-7)",
+        message: "Teléfono inválido, solamente debe de tener 10 digitos",
         type: "danger",
       });
       return false;
     }
 
     // Validación de email
-    if (
-      formCompany.email &&
-      !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formCompany.email)
-    ) {
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formCompany.email)) {
       setAlertError({
         show: true,
         title: "Error",
@@ -139,28 +152,70 @@ export const CreateCompany = () => {
       return false;
     }
 
-    return true; // Todos los campos son válidos
+    return true;
   };
 
-  const checkCompanyName = async (companyName) => {
+  const checkCompanyUniqueness = async () => {
     try {
       const response = await getCompanies();
-      const companies = response.data.companies || [];
-      return companies.some(
-        (company) =>
-          company.name.trim().toLowerCase() === companyName.trim().toLowerCase()
+
+      const companies = response?.data || [];
+
+      const nitExists = companies.some(
+        company => company.nit === formCompany.nit
       );
+
+      const emailExists = formCompany.email && companies.some(
+        company => company.email === formCompany.email
+      );
+
+      const phoneExists = formCompany.phone && companies.some(
+        company => company.phone === formCompany.phone
+      );
+
+      return { nitExists, emailExists, phoneExists };
     } catch (error) {
-      console.error("Error al verificar el nombre de la compañía:", error);
-      return false; // Asumimos que no existe para no bloquear la UI
+      console.error("Error al verificar datos de la compañía:", error);
+      return { nitExists: false, emailExists: false, phoneExists: false };
     }
   };
 
-  const validateName = async () => {
-    const name = formCompany.name.trim();
-    if (!name) return true; // Ya se valida en validateForm
+  const validatorExisting = async () => {
+    const { nitExists, emailExists, phoneExists } = await checkCompanyUniqueness();
+    const nameExists = await checkCompanyName(formCompany.name.trim());
 
-    const nameExists = await checkCompanyName(name);
+    let isValid = true;
+
+    if (nitExists) {
+      setAlertError1({
+        show: true,
+        title: "Error",
+        message: "Ya existe una compañía con este NIT",
+        type: "danger",
+      });
+      isValid = false;
+    }
+
+    if (emailExists) {
+      setAlertError1({
+        show: true,
+        title: "Error",
+        message: "Ya existe una compañía con este email",
+        type: "danger",
+      });
+      isValid = false;
+    }
+
+    if (phoneExists) {
+      setAlertError1({
+        show: true,
+        title: "Error",
+        message: "Ya existe una compañía con este teléfono",
+        type: "danger",
+      });
+      isValid = false;
+    }
+
     if (nameExists) {
       setAlertError1({
         show: true,
@@ -168,12 +223,29 @@ export const CreateCompany = () => {
         message: "Ya existe una compañía con este nombre",
         type: "danger",
       });
-      return false;
+      isValid = false;
     }
 
-    // Limpia el error si todo está bien
-    setAlertError1((prev) => ({ ...prev, show: false }));
-    return true;
+    // Si todo está bien, limpiamos los errores
+    if (isValid) {
+      setAlertError1((prev) => ({ ...prev, show: false }));
+    }
+
+    return isValid;
+  };
+
+  const checkCompanyName = async (companyName) => {
+    try {
+      const response = await getCompanies();
+      const companies = response?.data || [];
+      return companies.some(
+        (company) =>
+          company.name.trim().toLowerCase() === companyName.trim().toLowerCase()
+      );
+    } catch (error) {
+      console.error("Error al verificar el nombre de la compañía:", error);
+      return false;
+    }
   };
 
   const back = () => {
@@ -234,11 +306,10 @@ export const CreateCompany = () => {
               name="name"
               value={formCompany.name}
               onChange={handleChange}
-              onBlur={validateName}
+              onBlur={validatorExisting}
               type="text"
               className="form-control"
               placeholder="Ingrese el nombre de la compañía"
-              required
             />
           </div>
 
@@ -265,10 +336,10 @@ export const CreateCompany = () => {
                 name="phone"
                 value={formCompany.phone}
                 onChange={handleChange}
+                onBlur={validatorExisting}
                 type="tel"
                 className="form-control"
-                placeholder="Ej: 573012345678"
-                pattern="[0-9]{7,15}"
+                placeholder="Ej: 3012345678"
               />
             </div>
             <div className="col-md-6">
@@ -279,24 +350,24 @@ export const CreateCompany = () => {
                 name="nit"
                 value={formCompany.nit}
                 onChange={handleChange}
+                onBlur={validatorExisting}
                 type="text"
                 className="form-control"
                 placeholder="Número de Identificación Tributaria (Ej: 900123456-7)"
-                pattern="^\d{6,15}-\d{1}$"
-                required
               />
             </div>
           </div>
 
           <div className="mb-3">
             <label htmlFor="email" className="form-label">
-              Email
+              Correo electrónico
             </label>
             <input
               name="email"
               value={formCompany.email}
               onChange={handleChange}
-              type="email"
+              onBlur={validatorExisting}
+              type="text"
               className="form-control"
               placeholder="correo@empresa.com"
             />

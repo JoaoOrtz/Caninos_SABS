@@ -4,7 +4,7 @@ import { getCompanies } from './services/companies.service';
 import { MdDelete } from 'react-icons/md';
 import { RiEditBoxLine } from 'react-icons/ri';
 import { SeeCompany } from './components/see/see';
-import { AlertDeleteCategorie } from './components/delete/deleteCompany';
+import { AlertDeleteCompany } from './components/delete/deleteCompany';
 
 export const CompanyDashboard = () => {
 const navigate = useNavigate();
@@ -117,16 +117,6 @@ const navigate = useNavigate();
                   <td>{e.address}</td>
                   <td>{e.phone}</td>
                   <td>{e.email}</td>
-                  <td
-                    style={{
-                      maxWidth: "250px",
-                      whiteSpace: "nowrap",
-                      overflow: "hidden",
-                      textOverflow: "ellipsis",
-                    }}
-                  >
-                    {e.description}
-                  </td>
 
                   <td>
                     <div className="btn-group" role="group">
@@ -134,16 +124,18 @@ const navigate = useNavigate();
                         type="button"
                         className="btn btn-outline-danger btn-sm"
                         onClick={() =>
-                          AlertDeleteCategorie(
+                          AlertDeleteCompany(
                             e.id,
                             "¿De seguro quieres eliminar esta categoría?",
                             `La categoría que quieres eliminar es ${e.name}`, 
                             () => {
                               getCompanies().then((response) => {
-                                const updateCompany = response.data || []   
-                                setDataCompany(updateCompany)
-                              })
+                                const updatedCompany = response.data || [];
+                                setDataCompany(updatedCompany);
+                                checkCategory(updatedCompany); 
+                              });
                             }
+                            
                           )
                         }
                       >

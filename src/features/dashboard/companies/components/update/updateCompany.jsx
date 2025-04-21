@@ -7,12 +7,18 @@ export const UpdateCompany = () => {
   const navigate = useNavigate();
   const { id } = useParams();
 
-  // Objeto de datos
   const [formCompany, setFormCompany] = useState({
     name: "",
     address: "",
     phone: "",
     nit: "",
+    email: "",
+  });
+
+  const [originalValues, setOriginalValues] = useState({
+    name: "",
+    nit: "",
+    phone: "",
     email: "",
   });
 
@@ -30,7 +36,6 @@ export const UpdateCompany = () => {
     type: "warning",
   });
 
-  // Cargar datos de la compañía al montar el componente
   useEffect(() => {
     const fetchCompanyData = async () => {
       try {
@@ -42,6 +47,13 @@ export const UpdateCompany = () => {
             address: response.data.address || "",
             phone: response.data.phone || "",
             nit: response.data.nit || "",
+            email: response.data.email || "",
+          });
+
+          setOriginalValues({
+            name: response.data.name || "",
+            nit: response.data.nit || "",
+            phone: response.data.phone || "",
             email: response.data.email || "",
           });
         }
@@ -59,7 +71,6 @@ export const UpdateCompany = () => {
     fetchCompanyData();
   }, [id]);
 
-  // Función para recolección de los datos
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormCompany({
@@ -68,42 +79,7 @@ export const UpdateCompany = () => {
     });
   };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    if (!validateName()) {
-      return;
-    }
-
-    if (!validateForm()) {
-      return;
-    }
-
-    try {
-      const response = await putCompany(id, formCompany);
-      console.log(response);
-      
-      if (response.status === 200) {
-        navigate("/dashboard/Compañias");
-        AlertSuccess(
-          "Compañía actualizada",
-          "La compañía se ha actualizado correctamente"
-        );
-      }
-    } catch (error) {
-      console.error("Error updating company:", error);
-      setAlertError({
-        show: true,
-        title: "Error",
-        message:
-          error.response?.data?.message || "Error al actualizar la compañía",
-        type: "danger",
-      });
-    }
-  };
-
-  // Validación de datos
   const validateForm = () => {
-    // Verificar campos obligatorios
     if (!formCompany.name.trim()) {
       setAlertError({
         show: true,
@@ -134,21 +110,17 @@ export const UpdateCompany = () => {
       return false;
     }
 
-    if (formCompany.nit && !/^\d{6,15}-\d{1,2}$/.test(formCompany.nit)) {
-        setAlertError({
-          show: true,
-          title: "Error",
-          message: "NIT inválido. Usa el formato 900123456-7",
-          type: "danger",
-        });
-        return false;
-      }
-      
+    if (formCompany.nit && !/^\d{6,15}-\d{1}$/.test(formCompany.nit)) {
+      setAlertError({
+        show: true,
+        title: "Error",
+        message: "NIT inválido. Usa el formato 900123456-7",
+        type: "danger",
+      });
+      return false;
+    }
 
-    if (
-      formCompany.email &&
-      !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formCompany.email)
-    ) {
+    if (formCompany.email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formCompany.email)) {
       setAlertError({
         show: true,
         title: "Error",
@@ -158,42 +130,94 @@ export const UpdateCompany = () => {
       return false;
     }
 
-    return true; // Todos los campos son válidos
+    return true;
   };
 
-  const checkCompanyName = async (companyName) => {
+  const validateUniqueFields = async () => {
     try {
       const response = await getCompanies();
-      const companies = response.data.companies || [];
-      return companies.some(
-        (company) =>
-          company.name.trim().toLowerCase() ===
-            companyName.trim().toLowerCase() && company.id !== id // Excluir la compañía actual de la validación
-      );
+      const companies = response?.data || [];
+
+      const errors = [];
+
+      const checkChanged = (field) =>
+        formCompany[field].trim().toLowerCase() !==
+        (originalValues[field] || "").trim().toLowerCase();
+
+      if (checkChanged("name")) {
+        const nameExists = companies.some(
+          (c) =>
+            c.name.trim().toLowerCase() === formCompany.name.trim().toLowerCase() &&
+            c.id !== id
+        );
+        if (nameExists) errors.push("nombre");
+      }
+
+      if (checkChanged("nit")) {
+        const nitExists = companies.some(
+          (c) => c.nit === formCompany.nit && c.id !== id
+        );
+        if (nitExists) errors.push("NIT");
+      }
+
+      if (checkChanged("phone")) {
+        const phoneExists = companies.some(
+          (c) => c.phone === formCompany.phone && c.id !== id
+        );
+        if (phoneExists) errors.push("teléfono");
+      }
+
+      if (checkChanged("email")) {
+        const emailExists = companies.some(
+          (c) => c.email === formCompany.email && c.id !== id
+        );
+        if (emailExists) errors.push("email");
+      }
+
+      if (errors.length > 0) {
+        setAlertError1({
+          show: true,
+          title: "Error",
+          message: `Ya existe una compañía con este ${errors.join(", ")}`,
+          type: "danger",
+        });
+        return false;
+      }
+
+      setAlertError1((prev) => ({ ...prev, show: false }));
+      return true;
     } catch (error) {
-      console.error("Error al verificar el nombre de la compañía:", error);
-      return false;
+      console.error("Error validando unicidad:", error);
+      return true;
     }
   };
 
-  const validateName = async () => {
-    const name = formCompany.name.trim();
-    if (!name) return true; // Ya se valida en validateForm
+  const handleSubmit = async (e) => {
+    e.preventDefault();
 
-    const nameExists = await checkCompanyName(name);
-    if (nameExists) {
-      setAlertError1({
+    if (!validateForm()) return;
+
+    if (!(await validateUniqueFields())) return;
+
+    try {
+      const response = await putCompany(id, formCompany);
+      if (response.status === 200) {
+        navigate("/dashboard/Compañias");
+        AlertSuccess(
+          "Compañía actualizada",
+          "La compañía se ha actualizado correctamente"
+        );
+      }
+    } catch (error) {
+      console.error("Error updating company:", error);
+      setAlertError({
         show: true,
         title: "Error",
-        message: "Ya existe una compañía con este nombre",
+        message:
+          error.response?.data?.message || "Error al actualizar la compañía",
         type: "danger",
       });
-      return false;
     }
-
-    // Limpia el error si todo está bien
-    setAlertError1((prev) => ({ ...prev, show: false }));
-    return true;
   };
 
   const back = () => {
@@ -227,7 +251,6 @@ export const UpdateCompany = () => {
       <div className="container">
         <h2 className="mb-4 mt-3">Editar Compañía</h2>
 
-        {/* Mensajes de error */}
         {alertError.show && (
           <div
             className={`alert alert-${alertError.type} alert-dismissible fade show mb-2`}
@@ -248,14 +271,12 @@ export const UpdateCompany = () => {
 
         <form onSubmit={handleSubmit}>
           <div className="mb-3">
-            <label htmlFor="nombre" className="form-label">
-              Nombre *
-            </label>
+            <label className="form-label">Nombre</label>
             <input
               name="name"
+              onBlur={validateUniqueFields}
               value={formCompany.name}
               onChange={handleChange}
-              onBlur={validateName}
               type="text"
               className="form-control"
               placeholder="Ingrese el nombre de la compañía"
@@ -264,9 +285,7 @@ export const UpdateCompany = () => {
           </div>
 
           <div className="mb-3">
-            <label htmlFor="direccion" className="form-label">
-              Dirección
-            </label>
+            <label className="form-label">Dirección</label>
             <input
               name="address"
               value={formCompany.address}
@@ -279,13 +298,13 @@ export const UpdateCompany = () => {
 
           <div className="row mb-3">
             <div className="col-md-6">
-              <label htmlFor="telefono" className="form-label">
-                Teléfono
-              </label>
+              <label className="form-label">Teléfono</label>
               <input
                 name="phone"
                 value={formCompany.phone}
                 onChange={handleChange}
+                onBlur={validateUniqueFields}
+
                 type="tel"
                 className="form-control"
                 placeholder="Ej: 573012345678"
@@ -293,29 +312,28 @@ export const UpdateCompany = () => {
               />
             </div>
             <div className="col-md-6">
-              <label htmlFor="nit" className="form-label">
-                NIT
-              </label>
+              <label className="form-label">NIT</label>
               <input
                 name="nit"
                 value={formCompany.nit}
                 onChange={handleChange}
+                onBlur={validateUniqueFields}
+
                 type="text"
                 className="form-control"
                 placeholder="Número de Identificación Tributaria"
                 pattern="^[0-9]{6,15}-[0-9]{1}$"
-
               />
             </div>
           </div>
 
           <div className="mb-3">
-            <label htmlFor="email" className="form-label">
-              Email
-            </label>
+            <label className="form-label">Email</label>
             <input
               name="email"
               value={formCompany.email}
+              onBlur={validateUniqueFields}
+
               onChange={handleChange}
               type="email"
               className="form-control"
