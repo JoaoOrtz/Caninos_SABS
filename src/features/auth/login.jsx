@@ -25,9 +25,7 @@ export const Login = () => {
     e.preventDefault();
     
     try {
-      const res = await PostLogin(formData);
-      console.log(res);
-      
+      const res = await PostLogin(formData);      
       
       // Si el servidor devuelve un token, el login fue exitoso
       if (res.data.token) {

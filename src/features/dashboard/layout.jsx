@@ -70,14 +70,15 @@ export const Layout = () => {
         setUserRol(response.data);
 
         const res2 = await getUsers();
-        const admin = res2.data.find(e => e.role?.name === "administrador");
+        
+        const admin = res2.data.find(e => normalizeRoleName(e.role?.name) === "administrador");
 
         if (admin) {
           setUser(admin);
         }
 
         const normalizedRole = normalizeRoleName(response.data.name);
-        if (!['administrador', 'proveedor'].includes(normalizedRole)) {
+        if (!['administrador', 'proveedor', 'usuario'].includes(normalizedRole)) {
           setInvalidRole(true);
         }
       } catch (error) {
@@ -101,20 +102,20 @@ export const Layout = () => {
         <li key="usuario" className="nav-item">
           <Link to={`/dashboard/Usuario/${userR.id}`} className="nav-link text-white">Mi Perfil</Link>
         </li>,
-        <li key="usuarios" className="nav-item">
-          <Link to="/dashboard/Usuarios" className="nav-link text-white">Usuarios</Link>
-        </li>,
         <li key="roles" className="nav-item">
           <Link to="/dashboard/Roles" className="nav-link text-white">Roles</Link>
         </li>,
         <li key="compañias" className="nav-item">
           <Link to="/dashboard/Compañias" className="nav-link text-white">Compañías</Link>
         </li>,
-        <li key="productos" className="nav-item">
-          <Link to="/dashboard/Productos" className="nav-link text-white">Productos</Link>
+        <li key="usuarios" className="nav-item">
+          <Link to="/dashboard/Usuarios" className="nav-link text-white">Usuarios</Link>
         </li>,
         <li key="categorias" className="nav-item">
           <Link to="/dashboard/Categorias" className="nav-link text-white">Categorías</Link>
+        </li>,
+        <li key="productos" className="nav-item">
+          <Link to="/dashboard/Productos" className="nav-link text-white">Productos</Link>
         </li>,
         <li key="informacion" className="nav-item">
           <Link to="/dashboard/Informacion" className="nav-link text-white">Información Landing</Link>
@@ -129,6 +130,11 @@ export const Layout = () => {
         </li>,
         <li key="productos" className="nav-item">
           <Link to="/dashboard/Productos" className="nav-link text-white">Productos</Link>
+        </li>
+      ],
+      usuario: [
+        <li key="perfil" className="nav-item">
+          <Link to={`/dashboard/Usuario/${userR.id}`} className="nav-link text-white">Mi Perfil</Link>
         </li>
       ]
     };

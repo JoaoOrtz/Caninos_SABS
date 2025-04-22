@@ -37,7 +37,7 @@ export const CategoryDashboard = () => {
   useEffect(() => {
     const data = async () => {
       try {
-        const response = await getCategories();
+        const response = await getCategories();        
         const categorie = response?.data.categories || []        
         setDataCategories(response.data.categories);
         checkCategorie(categorie)
