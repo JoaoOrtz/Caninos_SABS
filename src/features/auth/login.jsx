@@ -23,21 +23,36 @@ export const Login = () => {
   //
   const handleSubmit = async (e) => {
     e.preventDefault();
-    await PostLogin(formData);
-    const logiados = await getLogin()
-    const Token = localStorage.getItem('Token');
-    const user = logiados.find(e => e.email === formData.email)  
-     console.log("informacion del usuario",user);
-     
-    const rolUser = user.roleId
-
-    localStorage.setItem('rolId', JSON.stringify(rolUser));
-    localStorage.setItem('User', JSON.stringify(user));
-    if (Token) {
-      navigate("/dashboard", { replace: true });
-    }
-    else {
-      AlertError('Error en las credenciales', 'El correo o la contraseña es invalida')
+    
+    try {
+      const res = await PostLogin(formData);
+      console.log(res);
+      
+      
+      // Si el servidor devuelve un token, el login fue exitoso
+      if (res.data.token) {
+        const logiados = await getLogin();    
+        const user = logiados.find(e => e.email === formData.email);
+        
+        if (!user) {
+          AlertError('Error', 'Usuario no encontrado');
+          return; // Detener ejecución si no existe
+        }
+        
+        const rolUser = user.roleId;
+  
+        localStorage.setItem('Token', res.data.token);
+        localStorage.setItem('rolId', JSON.stringify(rolUser));
+        localStorage.setItem('User', JSON.stringify(user));
+        
+        navigate("/dashboard", { replace: true });
+      } else {
+        // Si no hay token, mostrar error (usuario no existe o contraseña incorrecta)
+        AlertError('Error en las credenciales', 'El correo o la contraseña es inválida');
+      }
+    } catch (error) {
+      console.error("Error durante el login:", error);
+      AlertError('Error', 'No se pudo conectar al servidor o el usuario no existe');
     }
   };
   return (
