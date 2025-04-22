@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { getRol, getRols, putRol } from "../../service/roles.service";
+import { checkRolName, getRol, putRol } from "../../service/roles.service";
 import { AlertSuccess } from "../../../../../shared/alert/success";
 
 export const FormRolUpdate = () => {
@@ -14,6 +14,10 @@ export const FormRolUpdate = () => {
     description: ""
   });
 
+  const [originalValues, setOriginalValues] = useState({
+    name: ""
+  })
+
   // se define las variables que contendrán las alertas
 
   const [alertError, setAlertError] = useState({
@@ -22,14 +26,6 @@ export const FormRolUpdate = () => {
     message: "",
     type: "warning",
   });
-
-    const [alertError1, setAlertError1] = useState({
-      show: false,
-      title: "",
-      message: "",
-      type: "warning",
-    });
-  
 
   useEffect(() => {
     const data = async () => {
@@ -40,6 +36,9 @@ export const FormRolUpdate = () => {
             name: response.data.name,
             description: response.data.description,
           });
+          setOriginalValues({
+            name: response.data.name
+          })
         }
       }
     };
@@ -53,6 +52,29 @@ export const FormRolUpdate = () => {
       ...formRol,
       [name]: value,
     });
+  };
+
+  const validatorName = async () => {
+    const name = formRol.name.trim();
+    const originalName = originalValues.name.trim()
+
+    if (name.toLowerCase() === originalName.toLowerCase()) {
+      return true
+    }
+
+    const nameExists = await checkRolName(name);
+    if (nameExists) {
+      setAlertError({
+        show: true,
+        title: "Error",
+        message: "Ya existe un rol con este nombre",
+        type: "danger",
+      });
+      return false;
+    }
+
+    setAlertError((prev) => ({ ...prev, show: false }));
+    return true;
   };
 
   const HandleSubmit = async (e) => {
@@ -100,41 +122,6 @@ export const FormRolUpdate = () => {
     return true;
   };
 
-
-  const checkRolName = async (rolName) => {
-    try {
-      const response = await getRols();
-      const rols = response.data || [];
-      
-      return rols.some(
-        (rol) => 
-          rol.name.trim().toLowerCase() === rolName.trim().toLowerCase()
-      );
-    } catch (error) {
-      console.error("Error al verificar el nombre de la categoria:", error);
-      return false; // Asumimos que no existe para no bloquear la UI
-    }
-  };
-
-  const validatorName = async () => {
-    const name = formRol.name.trim();
-    if (!name) return true; // Ya se valida en validateForm
-
-    const nameExists = await checkRolName(name);
-    if (nameExists) {
-      setAlertError({
-        show: true,
-        title: "Error",
-        message: "Ya existe un producto con este nombre",
-        type: "danger",
-      });
-      return false;
-    }
-
-    setAlertError((prev) => ({ ...prev, show: false }));
-    return true;
-  };
-  
   const back = () => {
     navigate("/dashboard/Roles");
   };
