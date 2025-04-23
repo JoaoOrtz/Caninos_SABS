@@ -99,9 +99,6 @@ export const Layout = () => {
 
     const roleLinks = {
       administrador: [
-        <li key="usuario" className="nav-item">
-          <Link to={`/dashboard/Usuario/${userR.id}`} className="nav-link text-white">Mi Perfil</Link>
-        </li>,
         <li key="roles" className="nav-item">
           <Link to="/dashboard/Roles" className="nav-link text-white">Roles</Link>
         </li>,
@@ -119,6 +116,9 @@ export const Layout = () => {
         </li>,
         <li key="informacion" className="nav-item">
           <Link to="/dashboard/Informacion" className="nav-link text-white">Información Landing</Link>
+        </li>,
+        <li key="usuario" className="nav-item">
+          <Link to={`/dashboard/Usuario/${userR.id}`} className="nav-link text-white">Mi Perfil</Link>
         </li>
       ],
       proveedor: [

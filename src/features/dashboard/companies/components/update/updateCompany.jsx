@@ -100,6 +100,37 @@ export const UpdateCompany = () => {
       return false;
     }
 
+    if (!formCompany.phone || parseInt(formCompany.phone) <= 0) {
+      setAlertError({
+        show: true,
+        title: "Error",
+        message: "El teléfono de la compañía es obligatorio",
+        type: "danger",
+      });
+      return false;
+    }
+
+    
+    if (!formCompany.nit.trim()) {
+      setAlertError({
+        show: true,
+        title: "Error",
+        message: "El NIT es obligatorio",
+        type: "danger",
+      });
+      return false;
+    }
+
+    if (!formCompany.email.trim()) {
+      setAlertError({
+        show: true,
+        title: "Error",
+        message: "El correo es obligatorio",
+        type: "danger",
+      });
+      return false;
+    }
+
     if (formCompany.phone && !/^\d{7,15}$/.test(formCompany.phone)) {
       setAlertError({
         show: true,
@@ -220,6 +251,8 @@ export const UpdateCompany = () => {
     }
   };
 
+  
+
   const back = () => {
     navigate("/dashboard/Compañias");
   };
@@ -280,7 +313,6 @@ export const UpdateCompany = () => {
               type="text"
               className="form-control"
               placeholder="Ingrese el nombre de la compañía"
-              required
             />
           </div>
 

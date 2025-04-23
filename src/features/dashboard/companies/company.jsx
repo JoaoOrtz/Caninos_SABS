@@ -114,7 +114,9 @@ const navigate = useNavigate();
                   <td>{e.id}</td>
                   <td>{e.name}</td>
                   <td>{e.nit}</td>
-                  <td>{e.address}</td>
+                  <td>{e.address === "" ? (
+                      <span className="text-muted">Sin dirección</span>
+                    ) : e.address }</td>
                   <td>{e.phone}</td>
                   <td>{e.email}</td>
 
