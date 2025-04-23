@@ -3,6 +3,11 @@ import { Link, Outlet, useNavigate } from "react-router-dom";
 import { getRole } from "./layout.service";
 import { getUsers } from "./Users/services/users.service";
 
+// Icon
+
+import { TiThMenu } from "react-icons/ti";
+import { TbLogout } from "react-icons/tb";
+
 export const Layout = () => {
   const navigate = useNavigate();
   const [isSidebarOpen, setSidebarOpen] = useState(false);
@@ -21,6 +26,12 @@ export const Layout = () => {
 
   const toggleSidebar = () => {
     setSidebarOpen(!isSidebarOpen);
+  };
+
+  const closeSidebarOnMobile = () => {
+    if (window.innerWidth < 768) {
+      setSidebarOpen(false);
+    }
   };
 
   const normalizeRoleName = (name) => {
@@ -93,6 +104,21 @@ export const Layout = () => {
     };
 
     fetchUserRole();
+
+    // Cerrar sidebar al cambiar el tamaño de la pantalla
+    const handleResize = () => {
+      if (window.innerWidth >= 768) {
+        setSidebarOpen(true);
+      } else {
+        setSidebarOpen(false);
+      }
+    };
+
+    // Establecer estado inicial basado en el tamaño de la pantalla
+    handleResize();
+    window.addEventListener("resize", handleResize);
+
+    return () => window.removeEventListener("resize", handleResize);
   }, []);
 
   const navLinks = useMemo(() => {
@@ -103,72 +129,84 @@ export const Layout = () => {
 
     const roleLinks = {
       administrador: [
-        <li key="roles" className="nav-item">
+        <li key="roles" className="nav-item" onClick={closeSidebarOnMobile}>
           <Link to="/dashboard/Roles" className="nav-link text-white">
-            Roles
+            <i className="bi bi-person-badge me-2"></i>Roles
           </Link>
         </li>,
-        <li key="compañias" className="nav-item">
+        <li key="compañias" className="nav-item" onClick={closeSidebarOnMobile}>
           <Link to="/dashboard/Compañias" className="nav-link text-white">
-            Compañías
+            <i className="bi bi-building me-2"></i>Compañías
           </Link>
         </li>,
-        <li key="usuarios" className="nav-item">
+        <li key="usuarios" className="nav-item" onClick={closeSidebarOnMobile}>
           <Link to="/dashboard/Usuarios" className="nav-link text-white">
-            Usuarios
+            <i className="bi bi-people me-2"></i>Usuarios
           </Link>
         </li>,
-        <li key="categorias" className="nav-item">
+        <li
+          key="categorias"
+          className="nav-item"
+          onClick={closeSidebarOnMobile}
+        >
           <Link to="/dashboard/Categorias" className="nav-link text-white">
-            Categorías
+            <i className="bi bi-tags me-2"></i>Categorías
           </Link>
         </li>,
-        <li key="productos" className="nav-item">
+        <li key="productos" className="nav-item" onClick={closeSidebarOnMobile}>
           <Link to="/dashboard/Productos" className="nav-link text-white">
-            Productos
+            <i className="bi bi-box-seam me-2"></i>Productos
           </Link>
         </li>,
-        <li key="informacion" className="nav-item">
+        <li
+          key="informacion"
+          className="nav-item"
+          onClick={closeSidebarOnMobile}
+        >
           <Link to="/dashboard/Informacion" className="nav-link text-white">
-            Información Landing
+            <i className="bi bi-info-circle me-2"></i>Información Landing
           </Link>
         </li>,
-        <li key="usuario" className="nav-item">
+        <li key="usuario" className="nav-item" onClick={closeSidebarOnMobile}>
           <Link
             to={`/dashboard/Usuario/${userR.id}`}
             className="nav-link text-white"
           >
-            Mi Perfil
+            <i className="bi bi-person me-2"></i>Mi Perfil
           </Link>
         </li>,
       ],
       proveedor: [
-        <li key="perfil" className="nav-item">
+        <li key="perfil" className="nav-item" onClick={closeSidebarOnMobile}>
           <Link
             to={`/dashboard/Usuario/${userR.id}`}
             className="nav-link text-white"
           >
-            Mi Perfil
+            <i className="bi bi-person me-2"></i>Mi Perfil
           </Link>
         </li>,
-        <li key="categorias" className="nav-item">
+        <li
+          key="categorias"
+          className="nav-item"
+          onClick={closeSidebarOnMobile}
+        >
           <Link to="/dashboard/Categorias" className="nav-link text-white">
-            Categorías
+            <i className="bi bi-tags me-2"></i>Categorías
           </Link>
         </li>,
-        <li key="productos" className="nav-item">
+        <li key="productos" className="nav-item" onClick={closeSidebarOnMobile}>
           <Link to="/dashboard/Productos" className="nav-link text-white">
-            Productos
+            <i className="bi bi-box-seam me-2"></i>Productos
           </Link>
         </li>,
       ],
       usuario: [
-        <li key="perfil" className="nav-item">
+        <li key="perfil" className="nav-item" onClick={closeSidebarOnMobile}>
           <Link
             to={`/dashboard/Usuario/${userR.id}`}
             className="nav-link text-white"
           >
-            Mi Perfil
+            <i className="bi bi-person me-2"></i>Mi Perfil
           </Link>
         </li>,
       ],
@@ -179,13 +217,20 @@ export const Layout = () => {
 
   return (
     <div className="min-vh-100 d-flex flex-column">
-      <div className="bg-light p-3 d-flex flex-column flex-sm-row align-items-start align-items-sm-center justify-content-between gap-2 border-bottom">
+      <div
+        className="bg-light p-3 d-flex flex-column flex-sm-row align-items-start align-items-sm-center justify-content-between gap-2 border-bottom sticky-top"
+        style={{ zIndex: 1020 }}
+      >
         <div className="d-flex align-items-center gap-2">
           <button
             className="btn btn-outline-primary d-md-none"
             onClick={toggleSidebar}
           >
-            ☰
+            {isSidebarOpen ? (
+              <i className="bi bi-x-lg"><TiThMenu /></i>
+            ) : (
+              <i className="bi bi-list"><TiThMenu /></i>
+            )}
           </button>
           <p className="h5 fw-semibold m-0">
             Bienvenido{" "}
@@ -193,24 +238,50 @@ export const Layout = () => {
           </p>
         </div>
         <button onClick={logout} className="btn btn-danger">
-          Salir
+          <i className="bi bi-box-arrow-right me-1"></i><TbLogout />
         </button>
       </div>
 
       <div className="d-flex flex-grow-1 flex-column flex-md-row">
+        {/* Overlay para móvil */}
+        {isSidebarOpen && (
+          <div
+            className="d-md-none position-fixed top-0 start-0 w-100 h-100 bg-dark opacity-50"
+            style={{ zIndex: 1000 }}
+            onClick={toggleSidebar}
+          ></div>
+        )}
+
+        {/* Sidebar */}
         <nav
           className={`bg-primary text-white p-3 flex-column ${
             isSidebarOpen ? "d-flex" : "d-none"
-          } d-md-flex`}
-          style={{ width: "220px" }}
+          } d-md-flex position-md-relative`}
+          style={{
+            width: "220px",
+            zIndex: 1001,
+            position: isSidebarOpen ? "fixed" : "relative",
+            height: isSidebarOpen ? "100vh" : "auto",
+            transition: "transform 0.3s ease-in-out",
+            transform: isSidebarOpen ? "translateX(0)" : "translateX(-100%)",
+          }}
         >
-          <ul className="nav flex-column">
+          <ul className="nav flex-column gap-2">
             {!loading && navLinks}
             {loading && <li className="nav-item text-white">Cargando...</li>}
           </ul>
         </nav>
 
-        <div className="flex-grow-1 p-3">
+        {/* Contenido principal */}
+        <div
+          className={`flex-grow-1 p-3 ${
+            isSidebarOpen ? "overflow-hidden" : ""
+          }`}
+          style={{
+            marginLeft: isSidebarOpen ? "220px" : "0",
+            transition: "margin-left 0.3s ease-in-out",
+          }}
+        >
           <Outlet />
           {!loading && invalidRole && (
             <div className="alert alert-warning mt-3" role="alert">
