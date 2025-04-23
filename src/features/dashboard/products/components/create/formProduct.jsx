@@ -39,7 +39,7 @@ export const FormProduct = () => {
             setCategories(response.data.categories)
         }
         data()
-    },[])
+    }, [])
 
     //Funcion para recolección los datos
     const ChangeData = (e) => {
@@ -120,6 +120,17 @@ export const FormProduct = () => {
             return false;
         }
 
+        // Validar longitud máxima de la URL (por ejemplo, 500 caracteres)
+        if (formProduct.imageUrl && formProduct.imageUrl.length > 500) {
+            setAlertError({
+                show: true,
+                title: "Error",
+                message: "La URL de la imagen es demasiado larga (máximo 500 caracteres)",
+                type: "danger"
+            });
+            return false;
+        }
+
         return true; // Todos los campos son válidos
     };
 
@@ -127,7 +138,7 @@ export const FormProduct = () => {
         try {
             const response = await getProducts();
             const products = response.data.products || [];
-            return products.some(product => 
+            return products.some(product =>
                 product.name.trim().toLowerCase() === productName.trim().toLowerCase()
             );
         } catch (error) {
@@ -135,11 +146,11 @@ export const FormProduct = () => {
             return false; // Asumimos que no existe para no bloquear la UI
         }
     };
-    
+
     const validatorName = async () => {
         const name = formProduct.name.trim();
         if (!name) return true; // Ya se valida en validateForm
-        
+
         const nameExists = await checkProductName(name);
         if (nameExists) {
             setAlertError1({
@@ -150,7 +161,7 @@ export const FormProduct = () => {
             });
             return false;
         }
-        
+
         // Limpia el error si todo está bien
         setAlertError1(prev => ({ ...prev, show: false }));
         return true;
@@ -185,7 +196,7 @@ export const FormProduct = () => {
             </button>
             <div className="container">
                 <h2 className="mb-4 mt-3">Formulario de Producto</h2>
-                
+
                 {/* Mensaje de error para productos */}
                 {alertError.show && (
                     <div className={`alert alert-${alertError.type} alert-dismissible fade show mb-2`} role="alert">

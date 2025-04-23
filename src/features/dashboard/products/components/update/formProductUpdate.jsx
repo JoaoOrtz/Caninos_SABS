@@ -167,6 +167,18 @@ export const FormProductUpdate = () => {
       return false;
     }
 
+
+    // Validar longitud máxima de la URL (por ejemplo, 500 caracteres)
+    if (formProduct.imageUrl && formProduct.imageUrl.length > 500) {
+      setAlertError({
+        show: true,
+        title: "Error",
+        message: "La URL de la imagen es demasiado larga (máximo 500 caracteres)",
+        type: "danger"
+      });
+      return false;
+    }
+
     return true; // Todos los campos son válidos
   };
 
