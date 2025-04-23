@@ -3,15 +3,19 @@ import React from "react";
 export const Error404 = () => {
   return (
     <>
-    <div className="container text-center mt-5">
-      <h1 className="display-4 text-primary">¡Pagina no encontrada!</h1>
-      <img
-        src="../../../../public/img/Error404 (2).png"
-        alt="Pagina no encontrada"
-        className="img-fluid mt-4"
-        style={{ maxWidth: '300px' }}
-      />
-    </div>
+      <div className="container-fluid d-flex flex-column align-items-center justify-content-center vh-100 bg-light">
+        <h1 className="display-4 text-primary mb-4">¡Página no encontrada!</h1>
+        <img
+          src="../../../../public/img/Error404 (3).png"
+          alt="Página no encontrada"
+          className="img-fluid rounded"
+          style={{
+            maxHeight: "80vh",
+            objectFit: "cover",
+            borderRadius: "20px",
+          }}
+        />
+      </div>
     </>
   );
 };
