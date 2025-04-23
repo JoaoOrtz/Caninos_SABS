@@ -46,6 +46,113 @@ export const UpdateInfo = () => {
     tittleMVOCard3: "",
     textMVOCard3: "",
   });
+  const [alertError, setAlertError] = useState({
+      show: false,
+      title: "",
+      message: "",
+      type: "warning",
+    });
+
+  const validateForm = () => {
+    // Validaciones Bienvenida
+    if (!formInfo.tittleWelcom.trim()) {
+      showError("El título de la sección Bienvenida es obligatorio");
+      return false;
+    }
+    if (!formInfo.text1Welcom.trim()) {
+      showError("El texto 1 de Bienvenida es obligatorio");
+      return false;
+    }
+    if (!formInfo.text2Welcom.trim()) {
+      showError("El texto 2 de Bienvenida es obligatorio");
+      return false;
+    }
+    if (!formInfo.imageLogoWelcom.trim()) {
+      showError("La URL del logo de Bienvenida es obligatoria");
+      return false;
+    }
+  
+    // Validaciones Ofertas
+    if (!formInfo.tittleOffer.trim()) {
+      showError("El título de la sección Ofertas es obligatorio");
+      return false;
+    }
+  
+    for (let i = 1; i <= 4; i++) {
+      if (!formInfo[`tittleOfferCard${i}`]?.trim()) {
+        showError(`El título de la tarjeta ${i} en Ofertas es obligatorio`);
+        return false;
+      }
+      if (!formInfo[`textOfferCard${i}`]?.trim()) {
+        showError(`La descripción de la tarjeta ${i} en Ofertas es obligatoria`);
+        return false;
+      }
+    }
+  
+    // Validaciones Nosotros
+    if (!formInfo.tittleAbout.trim()) {
+      showError("El título de la sección Nosotros es obligatorio");
+      return false;
+    }
+    if (!formInfo.imageAbout.trim()) {
+      showError("La URL de imagen de la sección Nosotros es obligatoria");
+      return false;
+    }
+  
+    for (let i = 1; i <= 3; i++) {
+      if (!formInfo[`text${i}About`]?.trim()) {
+        showError(`El texto ${i} de la sección Nosotros es obligatorio`);
+        return false;
+      }
+      if (!formInfo[`tittleAboutcard${i}`]?.trim()) {
+        showError(`El título de la tarjeta ${i} en Nosotros es obligatorio`);
+        return false;
+      }
+      if (!formInfo[`text1Aboutcard${i}`]?.trim()) {
+        showError(`El texto 1 de la tarjeta ${i} en Nosotros es obligatorio`);
+        return false;
+      }
+      if (!formInfo[`text2Aboutcard${i}`]?.trim()) {
+        showError(`El texto 2 de la tarjeta ${i} en Nosotros es obligatorio`);
+        return false;
+      }
+    }
+  
+    // Validaciones MVO
+    if (!formInfo.tittleMVO.trim()) {
+      showError("El título de la sección MVO es obligatorio");
+      return false;
+    }
+  
+    for (let i = 1; i <= 3; i++) {
+      if (!formInfo[`imageMVOCard${i}`]?.trim()) {
+        showError(`La imagen de la tarjeta ${i} en MVO es obligatoria`);
+        return false;
+      }
+      if (!formInfo[`tittleMVOCard${i}`]?.trim()) {
+        showError(`El título de la tarjeta ${i} en MVO es obligatorio`);
+        return false;
+      }
+      if (!formInfo[`textMVOCard${i}`]?.trim()) {
+        showError(`La descripción de la tarjeta ${i} en MVO es obligatoria`);
+        return false;
+      }
+    }
+  
+    return true; // Todo es válido
+  };
+  
+  // Helper para mostrar errores
+  const showError = (message) => {
+    setAlertError({
+      show: true,
+      title: "Error de validación",
+      message,
+      type: "danger",
+    });
+  };
+  
+
 
   useEffect(() => {
     const fetchData = async () => {
@@ -75,6 +182,9 @@ export const UpdateInfo = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if (!validateForm()) {
+      return;
+    }
     try {
       const response = await putInfo(id, formInfo);
       if (response.status === 200) {
@@ -116,7 +226,7 @@ export const UpdateInfo = () => {
       </button>
       <div className="container mt-4">
         <h2 className="mb-4">Editar Información General</h2>
-
+        
         <form onSubmit={handleSubmit}>
           {/* Sección Welcome */}
           <div className="card mb-4">
@@ -344,6 +454,15 @@ export const UpdateInfo = () => {
               ))}
             </div>
           </div>
+          {/* alerta */}
+        {alertError.show && (
+          <div
+            className={`alert alert-${alertError.type} alert-dismissible fade show mb-2`}
+            role="alert"
+          >
+            <strong>{alertError.title}</strong> {alertError.message}
+          </div>
+        )}
 
           <div className="d-flex gap-2 justify-content-end mt-4">
             <button

@@ -30,6 +30,13 @@ export const FormProductUpdate = () => {
     type: "warning"
   });
 
+  const [alertError1, setAlertError1] = useState({
+    show: false,
+    title: "",
+    message: "",
+    type: "warning"
+  });
+
   useEffect(() => {
     const data = async () => {
       const response = await getCategories();
@@ -90,6 +97,10 @@ export const FormProductUpdate = () => {
   const HandleSubmint = async (e) => {
     e.preventDefault();
 
+    if (!validateForm()) {
+      return;
+    }
+
     const isValid = await validatorName();
     if (!isValid) return;
 
@@ -102,6 +113,63 @@ export const FormProductUpdate = () => {
       );
     }
   };
+
+  //Validacion de datos vacios
+  const validateForm = () => {
+    // Verificar campos obligatorios
+    if (!formProduct.name.trim()) {
+      setAlertError1({
+        show: true,
+        title: "Error",
+        message: "El nombre del producto es obligatorio",
+        type: "danger"
+      });
+      return false;
+    }
+
+    if (!formProduct.description.trim()) {
+      setAlertError1({
+        show: true,
+        title: "Error",
+        message: "La descripción del producto es obligatorio",
+        type: "danger"
+      });
+      return false;
+    }
+
+    if (!formProduct.price || parseInt(formProduct.price) <= 0) {
+      setAlertError1({
+        show: true,
+        title: "Error",
+        message: "El precio del producto es obligatorio",
+        type: "danger"
+      });
+      return false;
+    }
+
+    if (!formProduct.stock || parseInt(formProduct.stock) < 0) {
+      setAlertError1({
+        show: true,
+        title: "Error",
+        message: "La cantidad del producto es obligatorio",
+        type: "danger"
+      });
+      return false;
+    }
+
+    if (!formProduct.categoryId || formProduct.categoryId === "0") {
+      setAlertError1({
+        show: true,
+        title: "Error",
+        message: "Debe seleccionar una categoría",
+        type: "danger"
+      });
+      return false;
+    }
+
+    return true; // Todos los campos son válidos
+  };
+
 
   const back = () => {
     navegate("/dashboard/Productos");
@@ -143,6 +211,12 @@ export const FormProductUpdate = () => {
           </div>
         )}
 
+        {alertError1.show && (
+          <div className={`alert alert-${alertError1.type} alert-dismissible fade show mb-2`} role="alert">
+            <strong>{alertError1.title}</strong> {alertError1.message}
+          </div>
+        )}
+
         <form onSubmit={HandleSubmint}>
           <div className="mb-3">
             <label className="form-label">Nombre</label>
@@ -154,7 +228,6 @@ export const FormProductUpdate = () => {
               onChange={handleChange}
               onBlur={validatorName}
               placeholder="Nombre del producto"
-              required
             />
           </div>
 
@@ -182,7 +255,7 @@ export const FormProductUpdate = () => {
               />
             </div>
             <div className="col-md-6">
-              <label className="form-label">Stock</label>
+              <label className="form-label">Cantidad</label>
               <input
                 type="number"
                 className="form-control"

@@ -277,7 +277,9 @@ export const ProductDashboard = () => {
                       <span className="text-muted">Sin imagen</span>
                     )}
                   </td>
-                  <td>{product.category?.name || "Sin categoría"}</td>
+                  <td>{product.category?.name || (
+                      <span className="text-muted">Sin categoría</span>
+                    )}</td>
                   <td>
                     <div className="btn-group" role="group">
                       <button

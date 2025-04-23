@@ -37,7 +37,7 @@ export const CompanyLanding = () => {
 
               <p className="text-muted medium">Email: {companie.email}</p>
 
-              <p className="text-muted medium">Dirección: {companie.address}</p>
+              <p className="text-muted medium">Dirección: {companie.address || "Sin dirección"}</p>
 
             </div>
 
