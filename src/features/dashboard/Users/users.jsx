@@ -38,7 +38,7 @@ export const UserDashboard = () => {
       setRoleError({
         show: true,
         title: "Aviso",
-        message: "No tuene ningun rol creado",
+        message: "No tiene ningun rol creado",
         type: "warning",
       });
       return true;
@@ -124,7 +124,7 @@ export const UserDashboard = () => {
     navigation("/dashboard/editar-user/" + id);
   };
   useEffect(() => {
-    if (roleError.show) {
+    if (roleError.show || companyError.show) {
       const popoverTriggerList = [].slice.call(
         document.querySelectorAll('[data-bs-toggle="popover"]')
       );
@@ -132,7 +132,7 @@ export const UserDashboard = () => {
         return new window.bootstrap.Popover(popoverTriggerEl);
       });
     }
-  }, [roleError.show]);
+  }, [roleError.show,companyError.show]);
   return (
     <div className="container-fluid">
       <div className="row g-3 p-2 align-items-center">
@@ -140,7 +140,7 @@ export const UserDashboard = () => {
           <h2>Lista De Usuarios</h2>
         </div>
         <div className="col-auto ms-auto">
-          {roleError.show ? (
+          {roleError.show || companyError ? (
             <button
               type="button"
               className="btn btn-primary"

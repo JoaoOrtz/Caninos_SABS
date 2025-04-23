@@ -7,7 +7,6 @@ import { SeeRol } from "./components/see/seeRol";
 import { MdDelete } from "react-icons/md";
 import { RiEditBoxLine } from "react-icons/ri";
 
-
 export const RoleDashboard = () => {
   const navigate = useNavigate();
 
@@ -16,7 +15,7 @@ export const RoleDashboard = () => {
     show: false,
     title: "",
     message: "",
-    type: "warning"
+    type: "warning",
   });
 
   // Verificar rol
@@ -26,7 +25,7 @@ export const RoleDashboard = () => {
         show: true,
         title: "Aviso",
         message: "No se encontró ningun rol.",
-        type: "warning"
+        type: "warning",
       });
       return true;
     }
@@ -34,21 +33,19 @@ export const RoleDashboard = () => {
     return false;
   };
 
-
   useEffect(() => {
     const data = async () => {
       try {
         const response = await getRols();
-        const rol = response?.data || []
+        const rol = response?.data || [];
         setDataRols(response.data);
-        checkRol(rol)
-
+        checkRol(rol);
       } catch (error) {
         setRolError({
           show: true,
           title: "Error",
           message: "Error al cargar los roles",
-          type: "danger"
+          type: "danger",
         });
         console.error("Error fetching roles:", err);
       }
@@ -67,18 +64,26 @@ export const RoleDashboard = () => {
   return (
     <>
       <div className="container-fluid">
-
         <div className="row g-3 p-2 align-items-center">
           <div className="col">
             <h2>Lista De Rol</h2>
           </div>
           <div className="col-auto ms-auto">
-            <button type="button" className="btn btn-primary" onClick={viewForm}>Nuevo Rol</button>
+            <button
+              type="button"
+              className="btn btn-primary"
+              onClick={viewForm}
+            >
+              Nuevo Rol
+            </button>
           </div>
         </div>
         {/* Mensaje de error para productos */}
         {rolError.show && (
-          <div className={`alert alert-${rolError.type} alert-dismissible fade show mb-2`} role="alert">
+          <div
+            className={`alert alert-${rolError.type} alert-dismissible fade show mb-2`}
+            role="alert"
+          >
             <strong>{rolError.title}</strong> {rolError.message}
           </div>
         )}
@@ -117,39 +122,43 @@ export const RoleDashboard = () => {
 
                   <td>
                     <div className="btn-group" role="group">
-                      <button
-                        type="button"
-                        className="btn btn-outline-danger btn-sm"
-                        onClick={() =>
-                          AlertDeleteRol(
-                            e.id,
-                            "¿De seguro quieres eliminar el rol?",
-                            `El rol que quieres eliminar es ${e.name}`,
-                            () => {
-                              getRols().then((response) =>{
-                                const updateRols = response.data || [];
-                                setDataRols(updateRols)
-                              }) 
+                      {e.id === 1 ? (
+                        <SeeRol id={e.id} />
+                      ) : (
+                        <>
+                          <button
+                            type="button"
+                            className="btn btn-outline-danger btn-sm"
+                            onClick={() =>
+                              AlertDeleteRol(
+                                e.id,
+                                "¿De seguro quieres eliminar el rol?",
+                                `El rol que quieres eliminar es ${e.name}`,
+                                () => {
+                                  getRols().then((response) => {
+                                    const updateRols = response.data || [];
+                                    setDataRols(updateRols);
+                                  });
+                                }
+                              )
                             }
-                          )
-                        }
-                      >
-                        <MdDelete />
-                      </button>
-                      <SeeRol id={e.id} />
-                      <button
-                        type="button"
-                        className="btn btn-outline-success btn-sm"
-                        onClick={() => viewUpdate(e.id)}
-                      >
-                        <RiEditBoxLine />
-                      </button>
+                          >
+                            <MdDelete />
+                          </button>
+                          <SeeRol id={e.id} />
+                          <button
+                            type="button"
+                            className="btn btn-outline-success btn-sm"
+                            onClick={() => viewUpdate(e.id)}
+                          >
+                            <RiEditBoxLine />
+                          </button>
+                        </>
+                      )}
                     </div>
                   </td>
                 </tr>
-
               ))}
-
             </tbody>
           </table>
         </div>
