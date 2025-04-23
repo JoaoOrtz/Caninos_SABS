@@ -20,7 +20,6 @@ import { FormUserUpdate } from "../features/dashboard/Users/components/update/up
 import { FormRols } from "../features/dashboard/roles/components/create/formRoles";
 import { FormRolUpdate } from "../features/dashboard/roles/components/update/formRolUpdate";
 import { CreateCategorie } from "../features/dashboard/categories/components/create/createCategorie";
-import { UpdateCategorie } from "../features/dashboard/categories/components/update/UpdateCategorie";
 import { Informacion } from "../features/dashboard/informacion/informacion";
 import { UpdateInfo } from "../features/dashboard/informacion/components/updateInfo";
 import { User } from "../features/dashboard/user";
@@ -28,6 +27,8 @@ import { CompanyLanding } from "../features/landing/companies/companies";
 import { Welcome } from "../features/dashboard/welcome/welcome";
 import { CreateCompany } from "../features/dashboard/companies/components/create/createCompany";
 import { UpdateCompany } from "../features/dashboard/companies/components/update/updateCompany";
+import { UpdateCategorie } from "../features/dashboard/categories/components/update/updateCategorie";
+import { Error404 } from "../features/404/error404";
 
 
 export const RouteComponent = () => {
@@ -77,6 +78,7 @@ export const RouteComponent = () => {
           <Route path="Informacion" element={<Informacion/>} />
           <Route path="Editar-info/:id" element={<UpdateInfo/>}/>
         </Route>
+        <Route path='*' element={<Error404/>} />
       </Routes>
     </>
   );
