@@ -109,20 +109,20 @@ export const CreateUser = () => {
       });
       return false;
     }
-    if (!formUsers.companyId || formUsers.companyId === "0") {
-      setAlertError1({
-        show: true,
-        title: "Error",
-        message: "Debe seleccionar una Compañia",
-        type: "danger",
-      });
-      return false;
-    }
     if (!formUsers.roleId || formUsers.roleId === "0") {
       setAlertError1({
         show: true,
         title: "Error",
         message: "Debe seleccionar un rol",
+        type: "danger",
+      });
+      return false;
+    }
+    if (!formUsers.companyId || formUsers.companyId === "0") {
+      setAlertError1({
+        show: true,
+        title: "Error",
+        message: "Debe seleccionar una Compañia",
         type: "danger",
       });
       return false;
