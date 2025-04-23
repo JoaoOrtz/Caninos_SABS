@@ -35,7 +35,6 @@ const normalizeRoleName = (name) => {
 
   return "otro";
 };
-
 export const FormUserUpdate = () => {
   const [alertError, setAlertError] = useState({
     show: false,
@@ -92,11 +91,55 @@ export const FormUserUpdate = () => {
       return false;
     }
   };
-
+  const validateForm = () => {
+    // Verificar campos obligatorios
+    if (!formUser.fullName.trim()) {
+      setAlertError({
+        show: true,
+        title: "Error",
+        message: "El nombre del Usuario es obligatorio",
+        type: "danger",
+      });
+      return false;
+    }
+  
+    if (!formUser.email.trim()) {
+      setAlertError({
+        show: true,
+        title: "Error",
+        message: "El Correo es obligatorio",
+        type: "danger",
+      });
+      return false;
+    }
+    if (!formUser.companyId || formUser.companyId === "0") {
+      setAlertError({
+        show: true,
+        title: "Error",
+        message: "Debe seleccionar una Compañia",
+        type: "danger",
+      });
+      return false;
+    }
+    if (!formUser.roleId || formUser.roleId === "0") {
+      setAlertError({
+        show: true,
+        title: "Error",
+        message: "Debe seleccionar un rol",
+        type: "danger",
+      });
+      return false;
+    }
+  
+    return true; // Todos los campos son válidos
+  };
   const validateEmail = async () => {
     const email = formUser.email.trim();
     if (!email) return true;
 
+    if (!validateForm()) {
+      return;
+    }
     const emailExists = await checkUserEmail(email);
     if (emailExists) {
       setAlertError({
@@ -209,7 +252,6 @@ export const FormUserUpdate = () => {
               value={formUser.fullName}
               onChange={handleChange}
               className="form-control"
-              required
             />
           </div>
 
@@ -222,7 +264,6 @@ export const FormUserUpdate = () => {
               onChange={handleChange}
               onBlur={validateEmail}
               className="form-control"
-              required
             />
           </div>
 
@@ -234,7 +275,6 @@ export const FormUserUpdate = () => {
                 value={formUser.roleId}
                 onChange={handleChange}
                 className="form-select"
-                required
               >
                 <option value={0}>Seleccione un rol</option>
                 {roles.map((role) => (
@@ -253,7 +293,6 @@ export const FormUserUpdate = () => {
               value={formUser.companyId}
               onChange={handleChange}
               className="form-select"
-              required
             >
               <option value={0}>Seleccione una compañía</option>
               {companies.map((company) => (
