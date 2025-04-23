@@ -83,7 +83,10 @@ export const UpdateCategorie = () => {
   const HandleSubmit = async (e) => {
     e.preventDefault();
 
-    if (!validatorName()) {
+  // Esperamos la validación del nombre con await porque la función validatorName es asíncrona.
+  // Si no usamos await, el if se ejecuta antes de que validatorName termine, y la alerta de error
+  // (cuando el nombre está vacío o repetido) se muestra solo un instante y luego desaparece.
+    if (!(await validatorName())) {
       return;
     }
 

@@ -80,7 +80,7 @@ export const FormRolUpdate = () => {
   const HandleSubmit = async (e) => {
     e.preventDefault();
 
-    if (!validatorName()) {
+    if (!(await validatorName())) {
       return;
     }
 
